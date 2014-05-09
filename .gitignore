@@ -24,3 +24,5 @@
 
 # Ignore doc file for now
 doc
+# Ignore executables
+bin
