@@ -16,8 +16,9 @@
 #define SCREEN_H 720
 #define FPS 60
 #define MEDIA_DIR "media"
+#define FONT_DIR MEDIA_DIR "/fonts"
+#define MAIN_FONT_PATH FONT_DIR "/LiberationMono-Regular.ttf"
 #define DATA_DIR "data"
-#define MAIN_FONT_PATH MEDIA_DIR "/LiberationMono-Regular.ttf"
 #define COMPONENT_DATA_DIR DATA_DIR "/components"
 
 extern ALLEGRO_DISPLAY *display;
