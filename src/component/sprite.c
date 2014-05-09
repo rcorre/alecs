@@ -1,7 +1,6 @@
 #include "component/sprite.h"
 
-static list *sprite_templates;
-
+/*
 static struct ecs_component* new_sprite(component *template) {
   struct ecs_component *c = calloc(1, sizeof(struct ecs_component));
   memcpy(c, template, sizeof(struct ecs_component));
@@ -28,10 +27,4 @@ static void free_sprite_template(struct ecs_component *template) {
 static void free_sprite_templates() {
   list_free(sprite_templates, free);
 }
-
-ecs_component_manager sprite_manager = {
-  .new = new_sprite,
-  .free = free_sprite,
-  .load_templates = load_sprite_templates,
-  .free_templates = free_sprite_templates
-};
+*/

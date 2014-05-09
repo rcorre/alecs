@@ -1,15 +1,46 @@
 #include "ecs.h"
 
-
-ecs_component_manager ecs_component_managers[NUM_COMPONENT_TYPES];
 list *ecs_component_store[NUM_COMPONENT_TYPES];
-ecs_system ecs_systems[NUM_SYSTEM_TYPES];
+list *ecs_system_list;
 
 void ecs_init() {
+  for (int i = 0; i < NUM_COMPONENT_TYPES; i++) {
+    ecs_component_store[i] = list_new();
+  }
+  ecs_system_list = list_new();
 }
-ecs_entity *ecs_create_entity();
-void ecs_destroy_entity(ecs_entity *entity);
-void ecs_attach_component(ecs_entity *entity, struct ecs_component *template);
-struct ecs_component ecs_get_component_template(ecs_component_type type, 
-    const char *name);
 
+ecs_entity *ecs_entity_new(vector position) {
+  ecs_entity *entity = calloc(1, sizeof(entity));
+  entity->position = position;
+  return entity;
+}
+
+void ecs_entity_free(ecs_entity *entity) {
+  for (ecs_component_type i = 0; i < NUM_COMPONENT_TYPES; i++) {
+    ecs_remove_component(entity, i);
+  }
+  free(entity);
+}
+struct ecs_component* ecs_add_component(ecs_entity *entity, 
+    ecs_component_type type) 
+{
+  struct ecs_component *comp = calloc(1, sizeof(struct ecs_component));
+  comp->type = type;           // tag entity type
+  comp->owner_entity = entity; // point component back to owner
+  // place component in global store and give it a pointer to its holder
+  comp->node = list_push(ecs_component_store[type], comp);
+  return comp;
+}
+
+void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
+  // get component of given type from entity
+  struct ecs_component *comp = entity->components[(int)type];
+  // if entity did not have a component of this type, do nothing
+  if (comp != NULL) {
+    // remove component from global component store and free its memory
+    list_remove(ecs_component_store[type], comp->node, free);
+    // make sure entity no longer references a component for that type
+    entity->components[(int)type] = NULL;
+  }
+}
