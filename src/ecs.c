@@ -11,7 +11,7 @@ void ecs_init() {
   }
   ecs_system_update_handlers = list_new();
   ecs_system_draw_handlers = list_new();
-  list_push(ecs_system_update_handlers, sprite_system_draw);
+  list_push(ecs_system_draw_handlers, sprite_system_draw);
 }
 
 ecs_entity *ecs_entity_new(vector position) {

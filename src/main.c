@@ -14,17 +14,17 @@ static bool main_update();
 static void main_draw();
 
 int main(int argc, char *argv[]) {
-  if (al_game_init() != 0) {
+  if (al_game_init() != 0) { // set up allegro framework
     fprintf(stderr, "allegro setup failed\n");
     al_game_shutdown();
     exit(-1);
   }
-  ecs_init();
-  register_scene(level_new());
+  ecs_init();                  // set up entity-component-system framework
+  register_scene(level_new()); // set initial scene
 
-  bool run = true;
-  bool frame_tick = false;
-  while(run) {  //update-draw loop
+  bool run = true;         // false when game should exit
+  bool frame_tick = false; // true when frame time has ticked (time to update)
+  while(run) {             // update-draw loop
     ALLEGRO_EVENT ev;
     al_wait_for_event(event_queue, &ev);
     switch(ev.type) {
@@ -55,14 +55,14 @@ static bool main_update() {
   double cur_time = al_get_time();
   double delta = cur_time - last_frame_time; // time elapsed since last frame
   last_frame_time = cur_time;
-  ecs_update_systems(delta);
-  bool run = scene_update(delta);
+  ecs_update_systems(delta);      // update every system
+  bool run = scene_update(delta); // run scene's update function
   return run;
 }
 
 static void main_draw() {
   al_clear_to_color(al_map_rgb(0,0,0));
-  ecs_draw_systems();
-  scene_draw();
+  ecs_draw_systems();   // draw every system that provides a draw function
+  scene_draw();         // run scene's draw function
   al_flip_display();
 }
