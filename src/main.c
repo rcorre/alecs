@@ -2,7 +2,9 @@
 #include <stdlib.h>
 
 #include "al_game.h"
+#include "ecs.h"
 #include "scene/scene.h"
+#include "scene/level.h"
 
 static double last_frame_time; // when the last update occured
 
@@ -17,6 +19,8 @@ int main(int argc, char *argv[]) {
     al_game_shutdown();
     exit(-1);
   }
+  ecs_init();
+  register_scene(level_new());
 
   bool run = true;
   bool frame_tick = false;
@@ -43,6 +47,7 @@ int main(int argc, char *argv[]) {
   }
 
   al_game_shutdown();
+  ecs_shutdown();
   return 0;
 }
 
@@ -50,12 +55,14 @@ static bool main_update() {
   double cur_time = al_get_time();
   double delta = cur_time - last_frame_time; // time elapsed since last frame
   last_frame_time = cur_time;
+  ecs_update_systems(delta);
   bool run = scene_update(delta);
   return run;
 }
 
 static void main_draw() {
   al_clear_to_color(al_map_rgb(0,0,0));
+  ecs_draw_systems();
   scene_draw();
   al_flip_display();
 }

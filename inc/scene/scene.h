@@ -1,6 +1,13 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+/** \file scene.h
+  * \brief defines handlers that hook into the main game loop to implement a
+  * "scene" or "game state".
+  * scenes can be easily swapped out to change the game state by calling \ref
+  * register_scene
+**/
+
 #include <allegro5/allegro.h>
 
 // event processing functions
@@ -29,5 +36,4 @@ void scene_draw();
 // call current scene's shutdown function and set all handlers to NULL
 void scene_shutdown();
 
-#endif /* end of include guard: INPUT_MANAGER_H */
-
+#endif /* end of include guard: SCENE_H */

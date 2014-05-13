@@ -2,6 +2,7 @@
 #define SPRITE_H
 
 #include "al_game.h"
+#include "util/geometry.h"
 
 /** \ref component that draws a bitmap to the screen */
 typedef struct sprite {
@@ -9,6 +10,8 @@ typedef struct sprite {
   ALLEGRO_BITMAP *bitmap;
   /** color to shade drawn sprite with */
   ALLEGRO_COLOR tint;
+  /** center of bitmap */
+  vector center;
   /** scaling factor to use when drawing sprite. 1.0 is unscaled */
   double scale;
 } sprite;

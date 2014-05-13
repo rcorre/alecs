@@ -6,6 +6,7 @@
 **/
 
 #include "component/sprite.h"
+#include "system/sprite_sys.h"
 #include "util/list.h"
 #include "util/geometry.h"
 
@@ -37,9 +38,9 @@ typedef struct ecs_component {
   list_node *node;
   /** data for a given component type */
   union {
-    struct sprite *sprite;
+    struct sprite sprite;
   };
-} component;
+} ecs_component;
 
 /** a game object composed of \ref ecs_components */
 typedef struct ecs_entity {
@@ -63,11 +64,23 @@ typedef struct ecs_system {
 } ecs_system;
 /******************************************************************************/
 
+/* Typedefs *******************************************************************/
+/** function defining the update behavior of a system each frame */
+typedef void (*ecs_update_handler)(double time);
+/** function defining the rendering behavior of a system each frame.
+ *  called after clearing the screen and before flipping the display */
+typedef void (*ecs_draw_handler)(void);
+/******************************************************************************/
+
 /* global entity-component data stores ****************************************/
 /** active component lists indexed by \ref ecs_component_type */
 extern list *ecs_component_store[NUM_COMPONENT_TYPES];
-/** list of \ref ecs_systems that will be run during gameplay */
-extern list *ecs_system_list;
+/** list of every system's \ref ecs_update_handler to be called each frame.
+ *  the handlers are called in order from the list head to tail */
+extern list *ecs_system_update_handlers;
+/** list of every system's \ref ecs_draw_handler to be called each frame.
+ *  the handlers are called in order from the list head to tail */
+extern list *ecs_system_draw_handlers;
 /******************************************************************************/
 
 /* functions ******************************************************************/
@@ -97,5 +110,13 @@ struct ecs_component* ecs_add_component(ecs_entity *entity,
   * \ref ecs_remove_component does nothing.
 **/
 void ecs_remove_component(ecs_entity *entity, ecs_component_type type);
+/** call every \ref ecs_update_handler in \ref ecs_system_update_handlers.
+ *  \param time time elapsed since last update call (seconds) */
+void ecs_update_systems(double time);
+/** call every \ref ecs_draw_handler in \ref ecs_system_draw_handlers.
+ *  should be called after clearing and before flipping the display */
+void ecs_draw_systems(void);
+/** clean up all resources allocated by the ECS framework */
+void ecs_shutdown();
 /******************************************************************************/
 #endif /* end of include guard: ECS_H */

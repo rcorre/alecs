@@ -15,6 +15,7 @@ SRC_DIR := src $(addprefix src/,$(MODULES))
 INC_DIR = inc
 
 SRC_FILES := $(foreach sdir,$(SRC_DIR),$(wildcard $(sdir)/*.c))
+TEST_SRC := $(filter-out src/main%.c, $(SRC_FILES))
 
 EXECUTABLE = bin/run
 # allegro addons to link
@@ -35,6 +36,12 @@ debug: $(SOURCE_FILES)
 
 release: $(SOURCE_FILES)
 	$(CC) $(REL_FLAGS) -o $(EXECUTABLE) $(SRC_FILES) -I $(INC_DIR) $(LIBS)
+
+test: test-stringmap
+
+test-stringmap: $(TEST_SRC) test/test_stringmap.c
+	$(CC) $(DBG_FLAGS) -o bin/test_stringmap test/test_stringmap.c $(TEST_SRC) \
+		-I $(INC_DIR) $(LIBS)
 
 clean:
 	rm -r bin
