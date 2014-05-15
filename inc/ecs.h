@@ -41,7 +41,7 @@ typedef struct ecs_component {
     Collider collider;
     Propulsion propulsion;
     Health health;
-    Timer time;
+    Timer timer;
   };
 } ecs_component;
 
@@ -99,18 +99,24 @@ void ecs_entity_free(ecs_entity *entity);
 **/
 ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type);
 
-/** attach a sprite to an entity so it can be rendered
-  * \param arg_name description of argument
-  * \return return value description
-**/
-void ecs_attach_sprite(ecs_entity *entity, sprite *sprite);
-
 /** remove the component of a given type from an entity
   * \param entity entity from which to remove component
   * \param type type of component to remove. If entity has no such component,
   * \ref ecs_remove_component does nothing.
 **/
 void ecs_remove_component(ecs_entity *entity, ecs_component_type type);
+
+/** attach a sprite to an entity so it can be rendered
+  * \param entity entity to which sprite should be attached
+  * \param name key to identify sprite
+  * \param depth layer at which sprite should be drawn
+**/
+void ecs_attach_sprite(ecs_entity *entity, const char *name, int depth);
+
+/** remove and free sprite attached to an entity
+  * \param entity entity from which to remove sprite
+**/
+void ecs_remove_sprite(ecs_entity *entity);
 
 /** call every \ref ecs_system function in \ref ecs_systems.
  *  \param time time elapsed since last update call (seconds) */

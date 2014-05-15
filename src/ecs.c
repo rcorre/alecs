@@ -6,6 +6,7 @@ list *ecs_entities;
 list *ecs_component_store[NUM_COMPONENT_TYPES];
 
 void ecs_init() {
+  sprite_init();
   ecs_systems = list_new();
   ecs_entities = list_new();
   for (int i = 0; i < NUM_COMPONENT_TYPES; i++) {
@@ -14,12 +15,14 @@ void ecs_init() {
 }
 
 ecs_entity* ecs_entity_new(vector position) {
-  ecs_entity *entity = calloc(1, sizeof(entity));
+  ecs_entity *entity = calloc(1, sizeof(ecs_entity));
   entity->position = position;
+  list_push(ecs_entities, entity); // push onto entity list
   return entity;
 }
 
 void ecs_entity_free(ecs_entity *entity) {
+  ecs_remove_sprite(entity);
   for (ecs_component_type i = 0; i < NUM_COMPONENT_TYPES; i++) {
     ecs_remove_component(entity, i);
   }
@@ -36,7 +39,7 @@ ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
 
 void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
   // get component of given type from entity
-  struct ecs_component *comp = entity->components[(int)type];
+  ecs_component *comp = entity->components[(int)type];
   // if entity did not have a component of this type, do nothing
   if (comp != NULL) {
     // remove component from global component store and free its memory
@@ -46,9 +49,21 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
   }
 }
 
+void ecs_attach_sprite(ecs_entity *entity, const char *name, int depth) {
+  assert(entity->sprite == NULL); // shouldn't have sprite already
+  entity->sprite = sprite_new(name, &(entity->position), &(entity->angle), depth);
+}
+
+void ecs_remove_sprite(ecs_entity *entity) {
+  if (entity->sprite != NULL) {
+    sprite_free(entity->sprite);
+    entity->sprite = NULL;
+  }
+}
+
 void ecs_update_systems(double time) {
   list_node *sys_node = ecs_systems->head;
-  while (sys_node != NULL) {
+  while (sys_node != NULL) {  // iterate through every update function
     ecs_system sys = (ecs_system)sys_node->value;
     sys(time);  // run the system update function, passing the elapsed time
     sys_node = sys_node->next;

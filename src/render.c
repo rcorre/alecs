@@ -8,7 +8,8 @@ static list* get_sprite_layer(int layernum);
 
 void sprite_init() {
   for (int i = 0; i < SPRITE_LAYER_COUNT; i++) {
-    sprite_layers[i] = list_new(); // create a new list for every sprite layer
+    assert(sprite_layers[i] == NULL); // assert not already initialized
+    sprite_layers[i] = list_new();    // create a new list for each depth layer
   }
 }
 
@@ -22,6 +23,7 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
     int depth) {
   sprite *s = malloc(sizeof(sprite));
   ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
+  assert(bmp != NULL);
   s->bitmap = bmp;
   s->width = al_get_bitmap_width(bmp);
   s->height = al_get_bitmap_height(bmp);
@@ -33,12 +35,22 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
   s->tint = al_map_rgb(255,255,255);
   s->position_ptr = ref_position;
   s->angle_ptr = ref_angle;
-  list_push(get_sprite_layer(depth), s);
+  // give sprite back-reference to its node so it may be removed when freed
+  s->_node = list_push(get_sprite_layer(depth), s);
+  s->_depth = depth;
   return s;
 }
 
 void sprite_free(sprite *sprite) {
-  free(sprite);
+  list_remove(sprite_layers[sprite->_depth], sprite->_node, free);
+}
+
+void sprite_set_depth(sprite *sprite, int depth) {
+  // remove sprite from current layer but do not free it
+  list_remove(sprite_layers[sprite->_depth], sprite->_node, NULL);
+  sprite->_depth = depth;
+  // push sprite onto new layer and set node
+  sprite->_node = list_push(sprite_layers[depth], sprite);
 }
 
 void render_all_sprites() {

@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>

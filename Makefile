@@ -8,7 +8,7 @@ CFLAGS = -Wall -std=c11 -D_GNU_SOURCE
 # pg: generate profiling info for gprof
 DBG_FLAGS = $(CFLAGS) -ggdb -O0 -pg
 # flags for release build. use O3 for max optimization
-REL_FLAGS = $(CFLAGS) -O3
+REL_FLAGS = $(CFLAGS) -O3 -DNDEBUG
 
 MODULES := component system util scene 
 SRC_DIR := src $(addprefix src/,$(MODULES))

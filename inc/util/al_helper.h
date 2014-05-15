@@ -1,6 +1,10 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+/** \file al_helper.h
+  * \brief some helper methods for working in allegro
+**/
+
 #include <stdlib.h>
 #include <math.h>
 #include <allegro5/allegro.h>

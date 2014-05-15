@@ -9,8 +9,7 @@
 #include "util/geometry.h"
 #include "util/list.h"
 
-/** number of sprite layers above and below 0.
- *  valid layers are -(SPRITE_LAYER_LIMIT - 1) to (SPRITE_LAYER_LIMIT - 1)*/
+/** number of sprite layers above and below 0. */
 #define SPRITE_LAYER_LIMIT 5
 #define SPRITE_LAYER_COUNT (2 * SPRITE_LAYER_LIMIT + 1)
 
@@ -32,12 +31,18 @@ typedef struct sprite {
   vector *position_ptr;
   /** reference to owner's rotation */
   double *angle_ptr;
+  /** layer at which to draw sprite - modify only using \ref sprite_set_depth */
+  int _depth;
+  /** node holding sprite in backing sprite store - DO NOT MODIFY */
+  list_node *_node;
 } sprite;
 
 /** initialize sprite framework */
 void sprite_init();
+
 /** shut down sprite framework */
 void sprite_shutdown();
+
 /** create a new sprite
   * \param name name of bitmap resource to load
   * \param ref_position pointer to position of owner
@@ -47,7 +52,13 @@ void sprite_shutdown();
 **/
 sprite* sprite_new(const char *name, vector *ref_position,
     double *ref_angle, int depth);
+
+/** delete a sprite*/
 void sprite_free(sprite *sprite);
+
+/** change the depth of a sprite */
+void sprite_set_depth(sprite *sprite, int depth);
+
 /** draw every sprite to the display */
 void render_all_sprites();
 
