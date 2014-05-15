@@ -27,12 +27,14 @@ static void level_shutdown() {
 scene level_new(void) {
   bmp = al_game_get_bitmap("hawk");
   player_ship = ecs_entity_new((vector){.x = 50, .y = 50});
-  ecs_component *sprite_comp = ecs_add_component(player_ship, COMP_SPRITE);
+  /*
+  ecs_component *sprite_comp = ecs_add_sprite(player_ship, COMP_SPRITE);
   sprite *s = &sprite_comp->sprite;
   s->bitmap = bmp;
   s->center = (vector){.x = 20, .y = 20};
   s->tint = al_map_rgb(255, 255, 255);
   s->scale = 1.0;
+  */
   return (scene){
     .update = level_update,
     .draw = level_draw,
