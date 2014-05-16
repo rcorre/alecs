@@ -35,8 +35,8 @@ ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
   struct ecs_component *comp = calloc(1, sizeof(struct ecs_component));
   comp->type = type;           // tag entity type
   comp->owner_entity = entity; // point component back to owner
-  // place component in global store and return a pointer to it
-  list_push(ecs_component_store[(int)ECS_COMPONENT_BODY], comp);
+  // place component in global store, give it a pointer to its node
+  comp->node = list_push(ecs_component_store[(int)ECS_COMPONENT_BODY], comp);
   return comp;
 }
 
@@ -77,7 +77,7 @@ void ecs_update_systems(double time) {
 
 void ecs_free_all_entities() {
   // free every entity without destroying the list
-  list_each(ecs_entities, (list_lambda)ecs_entity_free);
+  list_clear(ecs_entities, (list_lambda)ecs_entity_free);
 }
 
 void ecs_shutdown() {

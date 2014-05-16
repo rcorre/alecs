@@ -25,6 +25,11 @@ typedef void (*list_lambda)(void*);
 /* Methods------------------------------------------------------------------- */
 /** \brief create a new list */
 list* list_new(void);
+/** destroy a list and all of its nodes.
+  * if fn is not NULL, call it on the value of every node */
+void list_free(list *list, list_lambda fn);
+/** remove all of a list's elements by calling \ref fn (if fn is not NULL) */
+void list_clear(list *list, list_lambda fn);
 /** \brief destroy a list and all of its nodes */
 /** \brief if fn is not NULL, call it on the value of every node */
 void list_free(list *list, list_lambda fn);

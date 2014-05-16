@@ -6,6 +6,11 @@ list* list_new() {
 }
 
 void list_free(list *list, list_lambda fn) {
+  list_clear(list, fn);
+  free(list);
+}
+
+void list_clear(list *list, list_lambda fn) {
   while (list->head != NULL) {
     list_remove(list, list->head, fn);
   }
