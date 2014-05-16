@@ -1,10 +1,12 @@
 #include "scene/scene.h"
 
 static scene current_scene = {0};
+ALLEGRO_COLOR scene_bg_color;
 
 void register_scene(scene s) {
   scene_shutdown();
   current_scene = s;
+  scene_bg_color = s.bg_color;
 }
 
 void scene_handle_input(ALLEGRO_EVENT ev) {
@@ -43,4 +45,5 @@ void scene_shutdown() {
     current_scene.shutdown();
   }
   current_scene = (scene){0};
+  scene_bg_color = al_map_rgb(0,0,0);
 }

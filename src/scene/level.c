@@ -31,6 +31,7 @@ scene level_new(void) {
     .draw = level_draw,
     .mouse = level_handle_mouse,
     .keyboard = level_handle_keyboard,
-    .shutdown = level_shutdown
+    .shutdown = level_shutdown,
+    .bg_color = al_map_rgb(200,200,200)
   };
 }

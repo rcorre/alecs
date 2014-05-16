@@ -61,7 +61,7 @@ static bool main_update() {
 }
 
 static void main_draw() {
-  al_clear_to_color(al_map_rgb(0,0,0));
+  al_clear_to_color(scene_bg_color);
   render_all_sprites();
   scene_draw(); // the scene may draw something in addition to sprites (UI)
   al_flip_display();
