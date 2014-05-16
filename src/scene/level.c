@@ -20,7 +20,6 @@ static void level_handle_keyboard(ALLEGRO_KEYBOARD_EVENT ev) {
 }
 
 static void level_shutdown() {
-  ecs_entity_free(player_ship);
 }
 
 scene level_new(void) {

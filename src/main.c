@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  al_game_shutdown();
   ecs_shutdown();
+  al_game_shutdown();
   return 0;
 }
 

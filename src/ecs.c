@@ -13,6 +13,7 @@ void ecs_init() {
     ecs_component_store[i] = list_new();
   }
   list_push(ecs_systems, scenery_system_fn);
+  list_push(ecs_systems, body_system_fn);
 }
 
 ecs_entity* ecs_entity_new(vector position) {
@@ -34,7 +35,8 @@ ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
   struct ecs_component *comp = calloc(1, sizeof(struct ecs_component));
   comp->type = type;           // tag entity type
   comp->owner_entity = entity; // point component back to owner
-  // place component in global store and give it a pointer to its holder
+  // place component in global store and return a pointer to it
+  list_push(ecs_component_store[(int)ECS_COMPONENT_BODY], comp);
   return comp;
 }
 
@@ -79,6 +81,6 @@ void ecs_free_all_entities() {
 }
 
 void ecs_shutdown() {
-  list_free(ecs_systems, free);
+  list_free(ecs_systems, NULL);
   list_free(ecs_entities, (list_lambda)ecs_entity_free);
 }

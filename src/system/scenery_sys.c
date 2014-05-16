@@ -3,7 +3,7 @@
 #include "system/scenery_sys.h"
 #include "util/al_helper.h"
 
-const static double cloud_min_scale = 0.5;
+const static double cloud_min_scale = 0.3;
 const static double cloud_max_scale = 2.0;
 const static double cloud_min_vel = 50;
 const static double cloud_max_vel = 200;
@@ -34,12 +34,15 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec) {
 
 static void make_cloud() {
   double start_y = randd(0, SCREEN_H);
+  double start_x = SCREEN_W + 400;
   int depth = randi(cloud_min_depth, cloud_max_depth);
   double scale = randd(cloud_min_scale, cloud_max_scale);
   double vel = randd(cloud_min_vel, cloud_max_vel);
   double alpha = randi(cloud_min_alpha, cloud_max_alpha);
-  ecs_entity *cloud = ecs_entity_new((vector){.x = SCREEN_W, .y = start_y});
+  ecs_entity *cloud = ecs_entity_new((vector){.x = start_x, .y = start_y});
   sprite* s = ecs_attach_sprite(cloud, "cloud", depth);
   s->scale = scale;
   s->tint.a = alpha;
+  ecs_component *body_comp = ecs_add_component(cloud, ECS_COMPONENT_BODY);
+  body_comp->body.velocity = (vector){-vel, 0};
 }

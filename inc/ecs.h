@@ -10,6 +10,7 @@
 #include "util/list.h"
 #include "util/geometry.h"
 #include "system/scenery_sys.h"
+#include "system/body_sys.h"
 
 /* struct declarations ********************************************************/
 /** tag to identify the type of a \ref ecs_component.

@@ -16,6 +16,10 @@ typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
 typedef struct Body {
   /** affects collision response */
   double mass;
+  /** rate of change in x and y coordinates (px/sec) */
+  vector velocity;
+  /** rate of change in angle (radians) */
+  double angular_velocity;
   /** maximum linear velocity in px/sec */
   double max_linear_velocity;
   /** maximum rotational velocity in radians/sec */
