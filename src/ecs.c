@@ -12,6 +12,7 @@ void ecs_init() {
   for (int i = 0; i < NUM_COMPONENT_TYPES; i++) {
     ecs_component_store[i] = list_new();
   }
+  list_push(ecs_systems, scenery_system_fn);
 }
 
 ecs_entity* ecs_entity_new(vector position) {
@@ -49,9 +50,11 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
   }
 }
 
-void ecs_attach_sprite(ecs_entity *entity, const char *name, int depth) {
+sprite* ecs_attach_sprite(ecs_entity *entity, const char *name, int depth) {
   assert(entity->sprite == NULL); // shouldn't have sprite already
-  entity->sprite = sprite_new(name, &(entity->position), &(entity->angle), depth);
+  sprite* s = sprite_new(name, &(entity->position), &(entity->angle), depth);
+  entity->sprite = s;
+  return s;
 }
 
 void ecs_remove_sprite(ecs_entity *entity) {

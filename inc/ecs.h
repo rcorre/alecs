@@ -9,6 +9,7 @@
 #include "render.h"
 #include "util/list.h"
 #include "util/geometry.h"
+#include "system/scenery_sys.h"
 
 /* struct declarations ********************************************************/
 /** tag to identify the type of a \ref ecs_component.
@@ -110,8 +111,9 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type);
   * \param entity entity to which sprite should be attached
   * \param name key to identify sprite
   * \param depth layer at which sprite should be drawn
+  * \return the newly created and attached sprite
 **/
-void ecs_attach_sprite(ecs_entity *entity, const char *name, int depth);
+sprite* ecs_attach_sprite(ecs_entity *entity, const char *name, int depth);
 
 /** remove and free sprite attached to an entity
   * \param entity entity from which to remove sprite

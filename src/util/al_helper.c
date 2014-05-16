@@ -1,5 +1,9 @@
 #include "util/al_helper.h"
 
+int randi(int min, int max) {
+  return min + (rand() % (max + 1));
+}
+
 double randd(double min, double max) {
   double factor = (double)rand()/(double)RAND_MAX;
   return min + (max - min) * factor;

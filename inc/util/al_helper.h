@@ -11,6 +11,9 @@
 #include <allegro5/color.h>
 #include "util/geometry.h"
 
+/**return a random int between min and max (inclusive) */
+int randi(int min, int max);
+
 /**return a random double between min and max */
 double randd(double min, double max);
 
