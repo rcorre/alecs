@@ -3,14 +3,14 @@
 #include "system/scenery_sys.h"
 #include "util/al_helper.h"
 
-const static double cloud_min_scale = 0.3;
-const static double cloud_max_scale = 2.0;
-const static double cloud_min_vel = 50;
-const static double cloud_max_vel = 200;
+const static vector cloud_min_scale = {1, 0.5};
+const static vector cloud_max_scale = {15, 5}; 
+const static double cloud_min_speed = 50;
+const static double cloud_max_speed = 200;
 const static int cloud_min_depth = -5;
 const static int cloud_max_depth = 5;
-const static int cloud_min_alpha = 20;
-const static int cloud_max_alpha = 150;
+const static int cloud_min_opacity = 20;
+const static int cloud_max_opacity = 150;
 
 // spawn a cloud every cloud_delay seconds
 static double cloud_delay = 1.0;
@@ -34,14 +34,16 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec) {
 
 static void make_cloud() {
   double start_y = randd(0, SCREEN_H);
-  double start_x = SCREEN_W + 400;
+  double start_x = SCREEN_W + 200;
   int depth = randi(cloud_min_depth, cloud_max_depth);
-  double scale = randd(cloud_min_scale, cloud_max_scale);
-  double vel = randd(cloud_min_vel, cloud_max_vel);
-  double alpha = randi(cloud_min_alpha, cloud_max_alpha);
+  double vel = randd(cloud_min_speed, cloud_max_speed);
+  double alpha = randd(cloud_min_opacity, cloud_max_opacity);
   ecs_entity *cloud = ecs_entity_new((vector){.x = start_x, .y = start_y});
   sprite* s = ecs_attach_sprite(cloud, "cloud", depth);
-  s->scale = scale;
+  s->scale = (vector){
+    randd(cloud_min_scale.x, cloud_max_scale.y),
+    randd(cloud_min_scale.x, cloud_max_scale.y)
+  };
   s->tint.a = alpha;
   ecs_component *body_comp = ecs_add_component(cloud, ECS_COMPONENT_BODY);
   body_comp->body.velocity = (vector){-vel, 0};

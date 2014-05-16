@@ -31,7 +31,7 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
     .x = al_get_bitmap_width(bmp) / 2,
     .y = al_get_bitmap_height(bmp) / 2
   };
-  s->scale = 1;
+  s->scale = (vector){1, 1};
   s->tint = al_map_rgb(255,255,255);
   s->position_ptr = ref_position;
   s->angle_ptr = ref_angle;
@@ -66,7 +66,7 @@ static void draw_sprite(sprite *s) {
       s->tint,                                // sprite color
       s->center.x, s->center.y,               // center of bitmap
       s->position_ptr->x, s->position_ptr->y, // location to draw center to
-      s->scale, s->scale,                     // x and y scaling
+      s->scale.x, s->scale.y,                 // x and y scaling
       *(s->angle_ptr),                        // rotation of entity
       0                                       // horiz/vert flip
   );

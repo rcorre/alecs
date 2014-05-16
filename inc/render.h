@@ -25,8 +25,8 @@ typedef struct sprite {
   int width;
   /** height of bitmap */
   int height;
-  /** scaling factor to use when drawing sprite. 1.0 is unscaled */
-  double scale;
+  /** horizontal and vertical scaling factors to use when drawing sprite */
+  vector scale;
   /** reference to owner's position */
   vector *position_ptr;
   /** reference to owner's rotation */
