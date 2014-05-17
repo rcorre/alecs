@@ -3,6 +3,8 @@
 
 #include "al_game.h"
 #include "ecs.h"
+#include "system/keyboard_sys.h"
+#include "system/mouse_sys.h"
 #include "scene/scene.h"
 #include "scene/level.h"
 
@@ -36,6 +38,8 @@ int main(int argc, char *argv[]) {
       case ALLEGRO_EVENT_DISPLAY_CLOSE:
         run = false;       // stop running if user asks to close window
       default:
+        ecs_handle_keypress(ev);
+        ecs_handle_mouse(ev);
         scene_handle_input(ev);
         break;
     }

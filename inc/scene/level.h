@@ -4,6 +4,7 @@
 #include "scene/scene.h"
 #include "al_game.h"
 #include "ecs.h"
+#include "entity/player.h"
 
 scene level_new(void);
 

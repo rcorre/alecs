@@ -10,7 +10,7 @@ DBG_FLAGS = $(CFLAGS) -ggdb -O0 -pg
 # flags for release build. use O3 for max optimization
 REL_FLAGS = $(CFLAGS) -O3 -DNDEBUG
 
-MODULES := component system util scene 
+MODULES := entity system util scene 
 SRC_DIR := src $(addprefix src/,$(MODULES))
 INC_DIR = inc
 

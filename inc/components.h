@@ -11,10 +11,28 @@
 #include "util/geometry.h"
 #include "ecs.h"
 
+/** tag to identify the type of a \ref ecs_component.
+ *  values must start at 0 and increment by 1 up to \ref NUM_COMPONENT_TYPES */
+typedef enum ecs_component_type {
+  ECS_COMPONENT_BODY,
+  ECS_COMPONENT_COLLIDER,
+  ECS_COMPONENT_PROPULSION,
+  ECS_COMPONENT_HEALTH,
+  ECS_COMPONENT_KEYBOARD_LISTENER,
+  ECS_COMPONENT_MOUSE_LISTENER,
+  NUM_COMPONENT_TYPES
+} ecs_component_type;
+
 /** forward declaration of \ref ecs_entity, defined in \ref ecs.h */
 struct ecs_entity;
 typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
 typedef void (*ecs_mouse_handler)(vector mousepos, bool lmb, bool rmb);
+/** action to be taken on keypress
+ *  \param ent pointer to the entity that holds the keyboard handler
+ *  \param keycode code of pressed key
+ *  \param down true if key was pressed, false if released */
+typedef void (*ecs_keyboard_handler)(struct ecs_entity *entity, int keycode, 
+    bool down);
 
 /** component giving physical properties to an \ref ecs_entity */
 typedef struct Body {
@@ -45,6 +63,12 @@ typedef struct Propulsion {
   double linear_accel;
   /** acceleration applied for rotation (radians/sec) */
   double angular_accel;
+  /** factor by which to apply horizontal and vertical acceleration.
+   *  +/-1.0 is full thrust in +/- x/y direction, zero vector means off */
+  vector linear_throttle;
+  /** factor by which to apply angular acceleration
+   *  +/-1.0 is full angular_accel clockwise/counterclockwise, 0 is off */
+  double angular_throttle;
 } Propulsion;
 
 /** comonent indicating that an \ref ecs_entity can take damage */
@@ -62,6 +86,10 @@ typedef struct Timer {
   /** action to perform on owner entity when \ref time_left == 0 */
   ecs_entity_trigger timer_trigger;
 } Timer;
+
+typedef struct KeyboardListener {
+  ecs_keyboard_handler handler;
+} KeyboardListener;
 
 typedef struct MouseListener {
   ecs_mouse_handler handler;

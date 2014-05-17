@@ -27,8 +27,7 @@ static void level_shutdown() {
 
 scene level_new(void) {
   main_font = al_game_get_font("LiberationMono-Regular");
-  player_ship = ecs_entity_new((vector){.x = 50, .y = 50});
-  ecs_attach_sprite(player_ship, "hawk", 0);
+  player_ship = make_player_ship();
   return (scene){
     .update = level_update,
     .draw = level_draw,

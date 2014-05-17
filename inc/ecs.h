@@ -10,17 +10,12 @@
 #include "util/list.h"
 #include "util/geometry.h"
 #include "system/scenery_sys.h"
+#include "system/propulsion_sys.h"
 #include "system/body_sys.h"
+#include "system/keyboard_sys.h"
+#include "system/mouse_sys.h"
 
 /* struct declarations ********************************************************/
-/** tag to identify the type of a \ref ecs_component.
- *  values must start at 0 and increment by 1 up to \ref NUM_COMPONENT_TYPES */
-typedef enum ecs_component_type {
-  ECS_COMPONENT_BODY,
-  ECS_COMPONENT_COLLIDER,
-  ECS_COMPONENT_PROPULSION,
-  NUM_COMPONENT_TYPES
-} ecs_component_type;
 
 /** component which can be attached to an \ref entity - Plain Old Data.
  *  components should contain no data that needs to be freed - Any such
@@ -44,6 +39,8 @@ typedef struct ecs_component {
     Propulsion propulsion;
     Health health;
     Timer timer;
+    KeyboardListener keyboard_listener;
+    MouseListener mouse_listener;
   };
 } ecs_component;
 
