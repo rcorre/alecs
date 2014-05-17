@@ -58,6 +58,8 @@ typedef struct ecs_entity {
   /** sprite determining how entity is rendered.
    *  may be NULL to if entity has no visual representation. */
   sprite *sprite;
+  /** pointer to node in entity list - DO NOT MODIFY */
+  list_node *_node;
 } ecs_entity;
 /******************************************************************************/
 

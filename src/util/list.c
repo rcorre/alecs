@@ -66,7 +66,8 @@ list_node* list_find(list *list, void *value) {
 void list_each(list *list, list_lambda fn) {
   list_node *node = list->head;
   while (node != NULL) {
+    list_node *next = node->next;
     fn(node->value);
-    node = node->next;
+    node = next;
   }
 }

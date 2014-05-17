@@ -3,14 +3,18 @@
 
 /** \file components.h
   * \brief all component data structures that can fill an \ecs_component
+  * A component should not contain any data that must be freed upon its
+  * construction
 **/
 
+#include <stdbool.h>
 #include "util/geometry.h"
 #include "ecs.h"
 
 /** forward declaration of \ref ecs_entity, defined in \ref ecs.h */
 struct ecs_entity;
 typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
+typedef void (*ecs_mouse_handler)(vector mousepos, bool lmb, bool rmb);
 
 /** component giving physical properties to an \ref ecs_entity */
 typedef struct Body {
@@ -24,6 +28,9 @@ typedef struct Body {
   double max_linear_velocity;
   /** maximum rotational velocity in radians/sec */
   double max_angular_velocity;
+  /** the entity will be destroyed if it leaves the screen from any of the
+   * provided directions */
+  Direction destroy_on_exit;
 } Body;
 
 /** component allowing an \ref ecs_entity to collide */
@@ -55,5 +62,9 @@ typedef struct Timer {
   /** action to perform on owner entity when \ref time_left == 0 */
   ecs_entity_trigger timer_trigger;
 } Timer;
+
+typedef struct MouseListener {
+  ecs_mouse_handler handler;
+} MouseListener;
 
 #endif /* end of include guard: COMPONENTS_H */

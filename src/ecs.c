@@ -19,7 +19,7 @@ void ecs_init() {
 ecs_entity* ecs_entity_new(vector position) {
   ecs_entity *entity = calloc(1, sizeof(ecs_entity));
   entity->position = position;
-  list_push(ecs_entities, entity); // push onto entity list
+  entity->_node = list_push(ecs_entities, entity); // push onto entity list
   return entity;
 }
 
@@ -28,19 +28,24 @@ void ecs_entity_free(ecs_entity *entity) {
   for (ecs_component_type i = 0; i < NUM_COMPONENT_TYPES; i++) {
     ecs_remove_component(entity, i);
   }
-  free(entity);
+  list_remove(ecs_entities, entity->_node, free);
 }
 
 ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
-  struct ecs_component *comp = calloc(1, sizeof(struct ecs_component));
+  assert(entity != NULL);
+  ecs_component *comp = calloc(1, sizeof(ecs_component));
   comp->type = type;           // tag entity type
   comp->owner_entity = entity; // point component back to owner
+  assert(entity->components[(int)type] == NULL);
+  // place component in entity's component slot for that type
+  entity->components[(int)type] = comp;
   // place component in global store, give it a pointer to its node
-  comp->node = list_push(ecs_component_store[(int)ECS_COMPONENT_BODY], comp);
+  comp->node = list_push(ecs_component_store[(int)type], comp);
   return comp;
 }
 
 void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
+  assert(entity != NULL);
   // get component of given type from entity
   ecs_component *comp = entity->components[(int)type];
   // if entity did not have a component of this type, do nothing
@@ -82,5 +87,8 @@ void ecs_free_all_entities() {
 
 void ecs_shutdown() {
   list_free(ecs_systems, NULL);
-  list_free(ecs_entities, (list_lambda)ecs_entity_free);
+  // use list each instead of list_free - ecs_entity_free handles removal of
+  // entity from list
+  list_each(ecs_entities, (list_lambda)ecs_entity_free);
+  free(ecs_entities);
 }

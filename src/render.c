@@ -25,8 +25,6 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
   ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
   assert(bmp != NULL);
   s->bitmap = bmp;
-  s->width = al_get_bitmap_width(bmp);
-  s->height = al_get_bitmap_height(bmp);
   s->center = (vector) {
     .x = al_get_bitmap_width(bmp) / 2,
     .y = al_get_bitmap_height(bmp) / 2
@@ -42,15 +40,15 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
 }
 
 void sprite_free(sprite *sprite) {
-  list_remove(sprite_layers[sprite->_depth], sprite->_node, free);
+  list_remove(get_sprite_layer(sprite->_depth), sprite->_node, free);
 }
 
 void sprite_set_depth(sprite *sprite, int depth) {
   // remove sprite from current layer but do not free it
-  list_remove(sprite_layers[sprite->_depth], sprite->_node, NULL);
+  list_remove(get_sprite_layer(sprite->_depth), sprite->_node, NULL);
   sprite->_depth = depth;
   // push sprite onto new layer and set node
-  sprite->_node = list_push(sprite_layers[depth], sprite);
+  sprite->_node = list_push(get_sprite_layer(depth), sprite);
 }
 
 void render_all_sprites() {
@@ -80,4 +78,12 @@ static list* get_sprite_layer(int layernum) {
     exit(-1);
   }
   return sprite_layers[layer];
+}
+
+int sprite_width(sprite *s) {
+  return al_get_bitmap_width(s->bitmap) * s->scale.x;
+}
+
+int sprite_height(sprite *s) {
+  return al_get_bitmap_height(s->bitmap) * s->scale.y;
 }

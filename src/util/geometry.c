@@ -41,3 +41,19 @@ double vector_dist(vector v1, vector v2) {
 double vector_angle(vector v) {
   return atan2(v.y, v.x);
 }
+
+int rect_top(rectangle r) {
+  return r.y;
+}
+
+int rect_bottom(rectangle r) {
+  return r.y + r.h;
+}
+
+int rect_left(rectangle r) {
+  return r.x;
+}
+
+int rect_right(rectangle r) {
+  return r.x + r.w;
+}

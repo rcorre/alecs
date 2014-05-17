@@ -12,6 +12,15 @@
 #define RADTODEG(x) ((x)/(PI*180.0))
 #define ZEROVEC ((vector){.x = 0, .y = 0})
 
+typedef enum Direction {
+  NONE  = 0x0, 
+  NORTH = 0x1, 
+  SOUTH = 0x2, 
+  EAST  = 0x4, 
+  WEST  = 0x8,
+  ALL_DIRECTIONS = NORTH | SOUTH | EAST | WEST
+} Direction;
+
 /** A 2D vector */
 typedef struct vector {
   double x, y;
@@ -46,5 +55,13 @@ vector vector_norm(vector v);
 double vector_dist(vector v1, vector v2);
 /** return angle of vector (ragians) */
 double vector_angle(vector v);
+/** y coordinate of top of rectangle */
+int rect_top(rectangle r);
+/** y coordinate of bottom of rectangle */
+int rect_bottom(rectangle r);
+/** x coordinate of left of rectangle */
+int rect_left(rectangle r);
+/** x coordinate of right of rectangle */
+int rect_right(rectangle r);
 
 #endif /* end of include guard: GEOMETRY_H */

@@ -21,10 +21,6 @@ typedef struct sprite {
   ALLEGRO_COLOR tint;
   /** center of bitmap */
   vector center;
-  /** width of bitmap */
-  int width;
-  /** height of bitmap */
-  int height;
   /** horizontal and vertical scaling factors to use when drawing sprite */
   vector scale;
   /** reference to owner's position */
@@ -61,5 +57,11 @@ void sprite_set_depth(sprite *sprite, int depth);
 
 /** draw every sprite to the display */
 void render_all_sprites();
+
+/** return the width of a sprite (taking scaling into account) */
+int sprite_width(sprite *s);
+
+/** return the height of a sprite (taking scaling into account) */
+int sprite_height(sprite *s);
 
 #endif /* end of include guard: RENDER_H */
