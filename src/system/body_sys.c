@@ -26,18 +26,22 @@ static void update_body(ecs_component *body_comp) {
 }
 
 static bool out_of_bounds(ecs_entity *e, Body *b) {
-  rectangle bounds = {.x = e->position.x, .y = e->position.y, .w = 0, .h = 0};
+  int top, bottom, left, right;
   sprite *s = e->sprite;
-  if (s != NULL) {
-    bounds.x -= sprite_width(s) / 2;
-    bounds.y -= sprite_height(s) / 2;
-    bounds.w = sprite_width(s);
-    bounds.w = sprite_height(s);
+  if (s != NULL) {  // determine bounds by sprite
+    left = e->position.x - sprite_width(s) / 2;
+    right = e->position.x + sprite_width(s) / 2;
+    top = e->position.y - sprite_height(s) / 2;
+    bottom = e->position.y + sprite_height(s) / 2;
+  }
+  else {  // just use the entity's center point
+    top = bottom = e->position.x;
+    left = right = e->position.y;
   }
 
   return
-    ((b->destroy_on_exit & NORTH) && rect_bottom(bounds) < 0) ||
-    ((b->destroy_on_exit & WEST ) && rect_right(bounds)  < 0) ||
-    ((b->destroy_on_exit & SOUTH) && rect_top(bounds)  > SCREEN_H) ||
-    ((b->destroy_on_exit & EAST ) && rect_left(bounds) > SCREEN_W);
+    ((b->destroy_on_exit & NORTH) && bottom < 0) ||
+    ((b->destroy_on_exit & WEST ) && right  < 0) ||
+    ((b->destroy_on_exit & SOUTH) && top    > SCREEN_H) ||
+    ((b->destroy_on_exit & EAST ) && left   > SCREEN_W);
 }

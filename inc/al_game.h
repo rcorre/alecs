@@ -36,7 +36,6 @@ extern ALLEGRO_DISPLAY *display;
 extern ALLEGRO_EVENT_QUEUE *event_queue;
 /** timer that ticks at a rate of \ref FPS */
 extern ALLEGRO_TIMER *frame_timer;
-extern ALLEGRO_FONT *main_font;
 
 /** set up allegro and subsystems, and load all resources */
 int al_game_init();

@@ -2,12 +2,15 @@
 
 static bool run = true;
 static ecs_entity *player_ship;
+static ALLEGRO_FONT *main_font;
 
 static bool level_update(double time) {
   return run;
 }
 
 static void level_draw(void) {
+  al_draw_textf(main_font, al_map_rgb(255,0,0), 0, 0, 0,
+      "#entities: %d", ecs_entities->length);
 }
 
 static void level_handle_mouse(ALLEGRO_MOUSE_EVENT ev) {
@@ -23,6 +26,7 @@ static void level_shutdown() {
 }
 
 scene level_new(void) {
+  main_font = al_game_get_font("LiberationMono-Regular");
   player_ship = ecs_entity_new((vector){.x = 50, .y = 50});
   ecs_attach_sprite(player_ship, "hawk", 0);
   return (scene){
