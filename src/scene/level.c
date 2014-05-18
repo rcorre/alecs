@@ -1,10 +1,18 @@
 #include "scene/level.h"
 
+static const double enemy_time = 1.0;
+
 static bool run = true;
 static ecs_entity *player_ship;
 static ALLEGRO_FONT *main_font;
+static double next_enemy_time;
 
 static bool level_update(double time) {
+  next_enemy_time -= time;
+  if (next_enemy_time <= 0) {
+    spawn_enemy(rand_point((rectangle){0,0,SCREEN_W, SCREEN_H}));
+    next_enemy_time = enemy_time;
+  }
   return run;
 }
 

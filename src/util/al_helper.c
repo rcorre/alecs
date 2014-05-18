@@ -21,6 +21,12 @@ vector rand_vec(double angle1, double angle2, double len_min, double len_max) {
   return vector_scale(v, len);
 }
 
+vector rand_point(rectangle rect) {
+  return (vector) { 
+    randd(rect.x, rect.x + rect.w), randd(rect.x, rect.y + rect.h)
+  };
+}
+
 double clamp(double v, double min, double max) {
   return fmax(fmin(v, max), min);
 }

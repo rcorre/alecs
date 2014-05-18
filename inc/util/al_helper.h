@@ -25,6 +25,9 @@ vector rand_unit_vec(double angle1, double angle2);
  */
 vector rand_vec(double angle1, double angle2, double len_min, double len_max);
 
+/** return a vector within the bounds of rect */
+vector rand_point(rectangle rect);
+
 /** limit v to fall between between min and max */
 double clamp(double v, double min, double max);
 
