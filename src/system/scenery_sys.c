@@ -4,16 +4,16 @@
 #include "util/al_helper.h"
 
 const static vector cloud_min_scale = {1, 0.5};
-const static vector cloud_max_scale = {15, 5};
+const static vector cloud_max_scale = {45, 15};
 const static double cloud_min_speed = 50;
-const static double cloud_max_speed = 500;
-const static int cloud_min_depth = -5;
-const static int cloud_max_depth = 5;
+const static double cloud_max_speed = 800;
+const static int cloud_min_depth = -3;
+const static int cloud_max_depth = 3;
 const static double cloud_min_opacity = 0.1;
-const static double cloud_max_opacity = 0.5;
+const static double cloud_max_opacity = 0.8;
 
 // spawn a cloud every cloud_delay seconds
-static double cloud_delay = 1.0;
+static double cloud_delay = 0.5;
 static double cloud_timer;
 
 static void make_cloud();
