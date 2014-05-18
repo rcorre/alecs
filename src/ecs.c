@@ -15,6 +15,7 @@ void ecs_init() {
   list_push(ecs_systems, scenery_system_fn);
   list_push(ecs_systems, body_system_fn);
   list_push(ecs_systems, propulsion_system_fn);
+  list_push(ecs_systems, collision_system_fn);
 }
 
 ecs_entity* ecs_entity_new(vector position) {

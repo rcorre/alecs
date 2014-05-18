@@ -12,6 +12,7 @@
 #include "system/scenery_sys.h"
 #include "system/propulsion_sys.h"
 #include "system/body_sys.h"
+#include "system/collision_sys.h"
 #include "system/keyboard_sys.h"
 #include "system/mouse_sys.h"
 
