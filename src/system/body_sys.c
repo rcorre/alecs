@@ -4,11 +4,20 @@ static double elapsed_time = 0; // store update time
 static void update_body(ecs_component *body_comp);
 // return true if an entity is out of bounds an should be destroyed
 static bool out_of_bounds(ecs_entity *e, Body *b);
+// keep the linear and angular speed of a Body within its limits
+static void limit_speed(Body *b);
 
 void body_system_fn(double time) {
   elapsed_time = time;
   list *body_list = ecs_component_store[(int)ECS_COMPONENT_BODY];
   list_each(body_list, (list_lambda)update_body);
+}
+
+void make_constant_vel_body(Body *b, vector vel, double angular_vel) {
+  b->velocity = vel;
+  b->max_linear_velocity = vector_len(vel);
+  b->angular_velocity = angular_vel;
+  b->max_angular_velocity = angular_vel;
 }
 
 static void update_body(ecs_component *body_comp) {
@@ -17,6 +26,7 @@ static void update_body(ecs_component *body_comp) {
   Body *body = &(body_comp->body);              // the component itself
   ecs_entity *entity = body_comp->owner_entity; // the owner entity
   assert(entity != NULL);
+  limit_speed(body);
   vector displacement = vector_scale(body->velocity, elapsed_time);
   entity->position = vector_add(displacement, entity->position);
   entity->angle += body->angular_velocity * elapsed_time;
@@ -44,4 +54,15 @@ static bool out_of_bounds(ecs_entity *e, Body *b) {
     ((b->destroy_on_exit & WEST ) && right  < 0) ||
     ((b->destroy_on_exit & SOUTH) && top    > SCREEN_H) ||
     ((b->destroy_on_exit & EAST ) && left   > SCREEN_W);
+}
+
+static void limit_speed(Body *b) {
+  double linear_factor = vector_len(b->velocity) / b->max_linear_velocity;
+  if (linear_factor > 1) {
+    b->velocity = vector_scale(b->velocity, 1 / linear_factor);
+  }
+  double angular_factor = b->angular_velocity / b->max_angular_velocity;
+  if (angular_factor > 1) {
+    b->angular_velocity = b->angular_velocity / angular_factor;
+  }
 }

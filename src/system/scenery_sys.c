@@ -36,7 +36,7 @@ static void make_cloud() {
   double start_y = randd(0, SCREEN_H);
   double start_x = SCREEN_W + 200;
   int depth = randi(cloud_min_depth, cloud_max_depth);
-  double vel = randd(cloud_min_speed, cloud_max_speed);
+  double speed = -randd(cloud_min_speed, cloud_max_speed);
   double alpha = randd(cloud_min_opacity, cloud_max_opacity);
   ecs_entity *cloud = ecs_entity_new((vector){.x = start_x, .y = start_y});
   sprite* s = ecs_attach_sprite(cloud, "cloud", depth);
@@ -45,8 +45,7 @@ static void make_cloud() {
     randd(cloud_min_scale.x, cloud_max_scale.y)
   };
   s->tint.a = alpha;
-  ecs_component *body_comp = ecs_add_component(cloud, ECS_COMPONENT_BODY);
-  body_comp->body.velocity = (vector){-vel, 0};
-  // destroy clouds when they exit the left side of the screen
-  body_comp->body.destroy_on_exit = WEST;
+  Body *body = &ecs_add_component(cloud, ECS_COMPONENT_BODY)->body;
+  make_constant_vel_body(body, (vector){speed, 0}, 0);
+  body->destroy_on_exit = WEST;
 }

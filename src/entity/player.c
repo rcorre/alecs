@@ -10,11 +10,11 @@ ecs_entity* make_player_ship() {
   k->keyboard_listener.handler = kbd_handler;
   // propulsion component
   ecs_component *prop = ecs_add_component(player, ECS_COMPONENT_PROPULSION);
-  prop->propulsion.linear_accel = 400;
+  prop->propulsion.linear_accel = 800;
   prop->propulsion.angular_accel = PI;
   // body component
   ecs_component *bod = ecs_add_component(player, ECS_COMPONENT_BODY);
-  bod->body.max_linear_velocity = 800;
+  bod->body.max_linear_velocity = 400;
   bod->body.max_angular_velocity = PI;
   bod->body.mass = 10;
   // collider component
