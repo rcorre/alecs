@@ -9,8 +9,10 @@ static bool level_update(double time) {
 }
 
 static void level_draw(void) {
+#ifndef NDEBUG
   al_draw_textf(main_font, al_map_rgb(255,0,0), 0, 0, 0,
       "#entities: %d", ecs_entities->length);
+#endif
 }
 
 static void level_handle_mouse(ALLEGRO_MOUSE_EVENT ev) {
