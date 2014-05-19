@@ -2,6 +2,7 @@
 #define PROPULSION_SYS_H
 
 #include "ecs.h"
+#include "particle_effects.h"
 
 void propulsion_system_fn(double time);
 

@@ -12,7 +12,6 @@ static double time_elapsed; // time elapsed for current update cycle
 
 // node in a doubly linked list of particles
 static list *particle_list;  // list of particles
-static list *generator_list; // list of generators
 static list *data_list;      // list of generator datas
 /* ---------------------------------------------------------------------------*/
 
@@ -99,7 +98,6 @@ void particle_init(ALLEGRO_BITMAP *display) {
   al_set_target_bitmap(display); // set target back to main display
   data_list = list_new();        // create list to store data
   particle_list = list_new();    // create list to store particles
-  generator_list = list_new();   // create list to store particles
 }
 
 list* load_all_generator_data() {
@@ -117,7 +115,7 @@ list* load_all_generator_data() {
   return names;
 }
 
-particle_generator* get_particle_generator(char *name) {
+particle_generator get_particle_generator(char *name) {
   list_node *p = data_list->head;
   generator_data *dat = NULL;
   while (p != NULL && strcmp(((generator_data*)p->value)->name, name) != 0) {
@@ -132,18 +130,9 @@ particle_generator* get_particle_generator(char *name) {
   else { // found data
     dat = (generator_data*)p->value;
   }
-  particle_generator *gen = calloc(1, sizeof(particle_generator));
-  gen->data = dat;                // point generator at its data
-  list_push(generator_list, gen); // add new generator to generator list
-  return gen;
-}
-
-void free_particle_generator(particle_generator* gen) {
-  // remove generator from list and free it
-  list_node *node = list_find(generator_list, gen);
-  if (node != NULL) {
-    list_remove(generator_list, node, NULL);
-  }
+  return (particle_generator) {
+    .data = dat, .position = {0,0}, .angle = 0, ._spawn_counter = 0
+  };
 }
 
 void spawn_particles(particle_generator *gen, double time, double density) {
@@ -204,7 +193,6 @@ void particle_shutdown() {
   }
   // remove all force sources, generator datas, and particles
   list_free(particle_list, free);
-  list_free(generator_list, NULL);
   list_free(data_list, data_free_fn);
 }
 

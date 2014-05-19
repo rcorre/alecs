@@ -54,9 +54,7 @@ void particle_init(ALLEGRO_BITMAP *display);
 // load all generator datas, return list of all of generator names
 list* load_all_generator_data();
 // retrieve a generator with which to spawn particles
-particle_generator* get_particle_generator(char *name);
-// free memory of a particle generator, unregister it from generator list
-void free_particle_generator(particle_generator* gen);
+particle_generator get_particle_generator(char *name);
 // create particles at a specified position using a generator
 // density multiplies the generator's default spawn rate. Use 1.0 for default
 void spawn_particles(particle_generator *gen, double time, double density);

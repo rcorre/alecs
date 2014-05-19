@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include "util/geometry.h"
 #include "ecs.h"
+#include "particle_effects.h"
 
 /** tag to identify the type of a \ref ecs_component.
  *  values must start at 0 and increment by 1 up to \ref NUM_COMPONENT_TYPES */
@@ -71,6 +72,7 @@ typedef struct Propulsion {
   /** factor by which to apply angular acceleration
    *  +/-1.0 is full angular_accel clockwise/counterclockwise, 0 is off */
   double angular_throttle;
+  particle_generator particle_effect;
 } Propulsion;
 
 /** comonent indicating that an \ref ecs_entity can take damage */

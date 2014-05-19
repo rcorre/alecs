@@ -20,4 +20,10 @@ static void propulsion_update(ecs_component *comp) {
   double rotation =  p.angular_accel * p.angular_throttle * elapsed_time;
   b->velocity = vector_add(b->velocity, dxy);
   b->angular_velocity += rotation;
+  // handle particle effect
+  if (p.particle_effect.data != NULL) {
+    p.particle_effect.angle = PI - comp->owner_entity->angle;
+    p.particle_effect.position = comp->owner_entity->position;
+    spawn_particles(&p.particle_effect, elapsed_time, 1.0);
+  }
 }
