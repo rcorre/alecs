@@ -2,7 +2,7 @@
 
 /* Static Variables ----------------------------------------------------------*/
 static const int BMP_SIZE = 32;
-static const char* DATA_PATH = "data/generator_data.cfg";
+static const char* DATA_PATH = "data/particle_effects.cfg";
 static ALLEGRO_BITMAP *particle_bitmap;
 // threading
 static double time_elapsed; // time elapsed for current update cycle
