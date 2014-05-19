@@ -57,7 +57,8 @@ list* load_all_generator_data();
 particle_generator get_particle_generator(char *name);
 // create particles at a specified position using a generator
 // density multiplies the generator's default spawn rate. Use 1.0 for default
-void spawn_particles(particle_generator *gen, double time, double density);
+void spawn_particles(particle_generator *gen, double time, double density,
+    vector source_velocity);
 // call once for each update
 void update_particles(double time);
 // call once during each draw

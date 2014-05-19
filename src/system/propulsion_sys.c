@@ -24,6 +24,6 @@ static void propulsion_update(ecs_component *comp) {
   if (p.particle_effect.data != NULL) {
     p.particle_effect.angle = PI - comp->owner_entity->angle;
     p.particle_effect.position = comp->owner_entity->position;
-    spawn_particles(&p.particle_effect, elapsed_time, 1.0);
+    spawn_particles(&p.particle_effect, elapsed_time, 1.0, b->velocity);
   }
 }

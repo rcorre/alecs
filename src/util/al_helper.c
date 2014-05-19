@@ -16,7 +16,7 @@ vector rand_unit_vec(double angle1, double angle2) {
 }
 
 vector rand_vec(double angle1, double angle2, double len_min, double len_max) {
-  double len = randd(len_max, len_max);
+  double len = randd(len_min, len_max);
   vector v = rand_unit_vec(angle1, angle2);
   return vector_scale(v, len);
 }

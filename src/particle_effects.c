@@ -66,7 +66,7 @@ static particle* make_particle(generator_data *data, vector pos, double angle) {
   double angle2 = angle + data->spawn_arc / 2;
   particle *p = malloc(sizeof(particle));
   p->position = pos;
-  p->velocity = rand_vec(angle1, angle2, 0, data->spawn_velocity);
+  p->velocity = rand_vec(angle1, angle2, data->spawn_velocity, data->max_velocity);
   p->time_alive = 0;
   p->time_to_live = randd(data->min_duration, data->max_duration);
   p->radius = data->start_radius;
@@ -80,7 +80,6 @@ static void update_particle(particle *p) {
   double factor = p->time_alive / p->time_to_live;
   double time = time_elapsed;
   p->velocity = vector_scale(p->velocity, 1 - data->deceleration * time);
-  p->velocity = vector_clamp(p->velocity, data->max_velocity);
   p->position = vector_add(p->position, vector_scale(p->velocity, time));
   p->time_alive += time;
   p->radius = data->start_radius + factor * data->end_radius;
@@ -135,7 +134,8 @@ particle_generator get_particle_generator(char *name) {
   };
 }
 
-void spawn_particles(particle_generator *gen, double time, double density) {
+void spawn_particles(particle_generator *gen, double time, double density,
+    vector source_velocity) {
   generator_data *data = gen->data;
   double spawn_count = gen->_spawn_counter + data->spawn_rate * density * time;
   // place excess in spawn counter
@@ -144,6 +144,7 @@ void spawn_particles(particle_generator *gen, double time, double density) {
   for (int i = 0; i < (int)spawn_count; i++) {
     // create particle and copy data to node's storage
     particle *p = make_particle(gen->data, gen->position, gen->angle);
+    p->velocity = vector_add(p->velocity, source_velocity);
     list_push(particle_list, p);
   }
 }
