@@ -3,6 +3,7 @@
 
 #include "al_game.h"
 #include "ecs.h"
+#include "particle_effects.h"
 #include "system/keyboard_sys.h"
 #include "system/mouse_sys.h"
 #include "scene/scene.h"
@@ -21,6 +22,8 @@ int main(int argc, char *argv[]) {
     al_game_shutdown();
     exit(-1);
   }
+
+  particle_init(al_get_backbuffer(display));
   ecs_init();                  // set up entity-component-system framework
   register_scene(level_new()); // set initial scene
 
@@ -50,6 +53,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  particle_shutdown();
   ecs_shutdown();
   al_game_shutdown();
   return 0;
@@ -60,12 +64,14 @@ static bool main_update() {
   double delta = cur_time - last_frame_time; // time elapsed since last frame
   last_frame_time = cur_time;
   ecs_update_systems(delta);      // update every system
+  update_particles(delta);
   bool run = scene_update(delta); // run scene's update function
   return run;
 }
 
 static void main_draw() {
   al_clear_to_color(scene_bg_color);
+  draw_particles();
   render_all_sprites();
   scene_draw(); // the scene may draw something in addition to sprites (UI)
   al_flip_display();

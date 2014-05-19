@@ -6,6 +6,7 @@ static bool run = true;
 static ecs_entity *player_ship;
 static ALLEGRO_FONT *main_font;
 static double next_enemy_time;
+static particle_generator *gen;
 
 static bool level_update(double time) {
   next_enemy_time -= time;
