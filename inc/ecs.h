@@ -15,6 +15,7 @@
 #include "system/collision_sys.h"
 #include "system/keyboard_sys.h"
 #include "system/mouse_sys.h"
+#include "system/weapon_sys.h"
 
 /* struct declarations ********************************************************/
 

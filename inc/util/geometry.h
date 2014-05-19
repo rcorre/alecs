@@ -1,6 +1,7 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <stdbool.h>
 #include <math.h>
 
 /** \file geometry.h
@@ -13,10 +14,10 @@
 #define ZEROVEC ((vector){.x = 0, .y = 0})
 
 typedef enum Direction {
-  NONE  = 0x0, 
-  NORTH = 0x1, 
-  SOUTH = 0x2, 
-  EAST  = 0x4, 
+  NONE  = 0x0,
+  NORTH = 0x1,
+  SOUTH = 0x2,
+  EAST  = 0x4,
   WEST  = 0x8,
   ALL_DIRECTIONS = NORTH | SOUTH | EAST | WEST
 } Direction;
@@ -55,13 +56,7 @@ vector vector_norm(vector v);
 double vector_dist(vector v1, vector v2);
 /** return angle of vector (ragians) */
 double vector_angle(vector v);
-/** y coordinate of top of rectangle */
-int rect_top(rectangle r);
-/** y coordinate of bottom of rectangle */
-int rect_bottom(rectangle r);
-/** x coordinate of left of rectangle */
-int rect_left(rectangle r);
-/** x coordinate of right of rectangle */
-int rect_right(rectangle r);
+/** return true if p is contained by r */
+bool rect_contains_point(rectangle r, point p);
 
 #endif /* end of include guard: GEOMETRY_H */

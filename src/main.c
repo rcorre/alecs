@@ -73,6 +73,7 @@ static void main_draw() {
   al_clear_to_color(scene_bg_color);
   draw_particles();
   render_all_sprites();
+  weapon_system_draw();
   scene_draw(); // the scene may draw something in addition to sprites (UI)
   al_flip_display();
 }

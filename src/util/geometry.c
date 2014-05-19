@@ -42,18 +42,7 @@ double vector_angle(vector v) {
   return atan2(v.y, v.x);
 }
 
-int rect_top(rectangle r) {
-  return r.y;
-}
-
-int rect_bottom(rectangle r) {
-  return r.y + r.h;
-}
-
-int rect_left(rectangle r) {
-  return r.x;
-}
-
-int rect_right(rectangle r) {
-  return r.x + r.w;
+bool rect_contains_point(rectangle r, point p) {
+  return 
+    (r.x <= p.x) && (p.x <= r.x + r.w) && (r.y <= p.y) && (p.y <= r.y + r.h);
 }

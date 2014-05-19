@@ -27,7 +27,7 @@ typedef enum ecs_component_type {
 /** forward declaration of \ref ecs_entity, defined in \ref ecs.h */
 struct ecs_entity;
 typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
-typedef void (*ecs_mouse_handler)(vector mousepos, bool lmb, bool rmb);
+typedef void (*ecs_mouse_handler)(struct ecs_entity *ent, bool lmb, bool rmb);
 /** action to be taken on keypress
  *  \param ent pointer to the entity that holds the keyboard handler
  *  \param keycode code of pressed key
@@ -96,7 +96,16 @@ typedef struct KeyboardListener {
 } KeyboardListener;
 
 typedef struct MouseListener {
-  ecs_mouse_handler handler;
+  /** area in which to register clicks */
+  rectangle click_rect;
+  /** action to take on mouse entering \ref click_rect */
+  ecs_entity_trigger on_enter;
+  /** action to take on mouse leaving \ref click_rect */
+  ecs_entity_trigger on_leave;
+  /** action to take when mouse button pressed inside \ref click_rect */
+  ecs_mouse_handler on_press;
+  /** action to take when mouse button released inside \ref click_rect */
+  ecs_mouse_handler on_release;
 } MouseListener;
 
 #endif /* end of include guard: COMPONENTS_H */
