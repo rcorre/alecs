@@ -1,5 +1,8 @@
 #include "system/behavior_sys.h"
 
+static double elapsed_time;
+static const double angle_close_enough = PI / 32;
+
 static void update_behavior(ecs_component *comp) {
   ecs_entity *ent = comp->owner_entity;
   Behavior b = comp->behavior;
@@ -12,11 +15,13 @@ static void update_behavior(ecs_component *comp) {
     vector disp = vector_sub(b.target->position, ent->position);
     // angle to target
     double angle_dif = angle_between(ent->angle, vector_angle(disp));
-    p->angular_throttle = angle_dif > 0 ? 1 : -1;
+    double throttle = fmin(1, fabs(angle_dif) / (p->turn_rate * elapsed_time));
+    p->angular_throttle = angle_dif > 0 ? throttle : -throttle;
   }
 }
 
 void behavior_system_fn(double time) {
+  elapsed_time = time;
   list *components = ecs_component_store[ECS_COMPONENT_BEHAVIOR];
   list_each(components, (list_lambda)update_behavior);
 }

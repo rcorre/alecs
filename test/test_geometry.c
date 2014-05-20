@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
   vector v45 = {cos(PI/4), sin(PI/4)};
   vector v45neg = {-cos(PI/4), -sin(PI/4)};
   assert(almost_equal(vector_angle(v45), PI / 4));
-  assert(almost_equal(vector_angle(v45neg), 5 * PI / 4));
+  assert(almost_equal(vector_angle(v45neg), -3 * PI / 4));
   assert(almost_equal(vector_angle(ux), 0));
   assert(almost_equal(vector_angle(uy), PI / 2));
   assert(vec_equal(vector_neg(v45), v45neg));
@@ -49,9 +49,9 @@ int main(int argc, char *argv[]) {
   assert(almost_equal(normalize_angle(-2*PI)       , 0));
   assert(almost_equal(normalize_angle(4*PI)        , 0));
   assert(almost_equal(normalize_angle(-4*PI)       , 0));
-  assert(almost_equal(normalize_angle(-5*PI)       , PI));
+  assert(almost_equal(normalize_angle(-5*PI)       , -PI));
   assert(almost_equal(normalize_angle(-3*PI / 2)   , PI / 2));
-  assert(almost_equal(normalize_angle(-PI / 6)     , 11 * PI / 6));
+  assert(almost_equal(normalize_angle(-PI / 6)     , -PI / 6));
   assert(almost_equal(normalize_angle(20 * PI / 3) , 2 * PI / 3));
 
   // scaling and rotating
@@ -64,12 +64,13 @@ int main(int argc, char *argv[]) {
   assert(almost_equal(vector_len(v5_60), 5));
   assert(almost_equal(vector_len(v5_neg60), 5));
   assert(almost_equal(vector_angle(v5_60), PI/3));
-  assert(almost_equal(vector_angle(v5_neg60), 5 * PI/3));
+  assert(almost_equal(vector_angle(v5_neg60), -PI/3));
 
   // angle between
-  printf("%f\n", angle_between(PI/3, 5*PI/3));
   assert(almost_equal(angle_between(PI/6, PI/3)  , PI/6));
   assert(almost_equal(angle_between(PI/3, PI/6)  , -PI/6));
   assert(almost_equal(angle_between(PI/3, PI)    , 2*PI/ 3));
   assert(almost_equal(angle_between(PI/3, 5*PI/3), -2*PI/ 3));
+  assert(almost_equal(angle_between(-PI, PI), 0));
+  assert(almost_equal(angle_between(PI, -PI), 0));
 }

@@ -20,9 +20,9 @@ static void propulsion_update(ecs_component *comp) {
   if (p.directed) {
     dxy = vector_rotate(dxy, comp->owner_entity->angle);
   }
-  double rotation =  p.angular_accel * p.angular_throttle * elapsed_time;
   b->velocity = vector_add(b->velocity, dxy);
-  b->angular_velocity += rotation;
+  comp->owner_entity->angle += p.turn_rate * p.angular_throttle * elapsed_time;
+  comp->owner_entity->angle = normalize_angle(comp->owner_entity->angle);
   // handle particle effect
   if (p.particle_effect.data != NULL) {
     p.particle_effect.angle = PI - comp->owner_entity->angle;

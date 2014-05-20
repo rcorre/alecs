@@ -39,7 +39,7 @@ double vector_dist(vector v1, vector v2) {
 }
 
 double vector_angle(vector v) {
-  return normalize_angle(atan2(v.y, v.x));
+  return atan2(v.y, v.x);
 }
 
 vector vector_rotate(vector v, double angle) {

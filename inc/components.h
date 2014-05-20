@@ -42,12 +42,8 @@ typedef struct Body {
   double mass;
   /** rate of change in x and y coordinates (px/sec) */
   vector velocity;
-  /** rate of change in angle (radians) */
-  double angular_velocity;
   /** maximum linear velocity in px/sec */
   double max_linear_velocity;
-  /** maximum rotational velocity in radians/sec */
-  double max_angular_velocity;
   /** the entity will be destroyed if it leaves the screen from any of the
    * provided directions */
   Direction destroy_on_exit;
@@ -67,13 +63,13 @@ typedef struct Propulsion {
   bool directed;
   /** acceleration applied for linear movement (pixels/sec) */
   double linear_accel;
-  /** acceleration applied for rotation (radians/sec) */
-  double angular_accel;
+  /** angular velocity achieved when turning */
+  double turn_rate;
   /** factor by which to apply horizontal and vertical acceleration.
    *  +/-1.0 is full thrust in +/- x/y direction, zero vector means off */
   vector linear_throttle;
-  /** factor by which to apply angular acceleration
-   *  +/-1.0 is full angular_accel clockwise/counterclockwise, 0 is off */
+  /** factor by which to apply turn rate to body's angle
+   *  +/-1.0 is full turn_rate clockwise/counterclockwise, 0 is off */
   double angular_throttle;
   particle_generator particle_effect;
 } Propulsion;

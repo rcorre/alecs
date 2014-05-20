@@ -13,11 +13,9 @@ void body_system_fn(double time) {
   list_each(body_list, (list_lambda)update_body);
 }
 
-void make_constant_vel_body(Body *b, vector vel, double angular_vel) {
+void make_constant_vel_body(Body *b, vector vel) {
   b->velocity = vel;
   b->max_linear_velocity = vector_len(vel);
-  b->angular_velocity = angular_vel;
-  b->max_angular_velocity = angular_vel;
 }
 
 static void update_body(ecs_component *body_comp) {
@@ -29,8 +27,6 @@ static void update_body(ecs_component *body_comp) {
   limit_speed(body);
   vector displacement = vector_scale(body->velocity, elapsed_time);
   entity->position = vector_add(displacement, entity->position);
-  entity->angle += body->angular_velocity * elapsed_time;
-  entity->angle = normalize_angle(entity->angle);
   if (out_of_bounds(entity, body)) {
     ecs_entity_free(entity);
   }
@@ -61,9 +57,5 @@ static void limit_speed(Body *b) {
   double linear_factor = vector_len(b->velocity) / b->max_linear_velocity;
   if (linear_factor > 1) {
     b->velocity = vector_scale(b->velocity, 1 / linear_factor);
-  }
-  double angular_factor = abs(b->angular_velocity / b->max_angular_velocity);
-  if (angular_factor > 1) {
-    b->angular_velocity = b->angular_velocity / angular_factor;
   }
 }

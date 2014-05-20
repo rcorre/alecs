@@ -46,6 +46,6 @@ static void make_cloud() {
   };
   s->tint.a = alpha;
   Body *body = &ecs_add_component(cloud, ECS_COMPONENT_BODY)->body;
-  make_constant_vel_body(body, (vector){speed, 0}, 0);
+  make_constant_vel_body(body, (vector){speed, 0});
   body->destroy_on_exit = WEST;
 }

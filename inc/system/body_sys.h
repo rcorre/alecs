@@ -16,6 +16,6 @@ void body_system_fn(double time);
   * \param vel constant linear velocity of body (px/sec)
   * \param angular_vel constant angular velocity of body (radians/sec) 
 **/
-void make_constant_vel_body(Body *b, vector vel, double angular_vel);
+void make_constant_vel_body(Body *b, vector vel);
 
 #endif /* end of include guard: BODY_SYS_H */
