@@ -16,6 +16,7 @@
 #include "system/keyboard_sys.h"
 #include "system/mouse_sys.h"
 #include "system/weapon_sys.h"
+#include "system/behavior_sys.h"
 
 /* struct declarations ********************************************************/
 
@@ -41,6 +42,7 @@ typedef struct ecs_component {
     Propulsion propulsion;
     Health health;
     Timer timer;
+    Behavior behavior;
     KeyboardListener keyboard_listener;
     MouseListener mouse_listener;
   };

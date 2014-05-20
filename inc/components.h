@@ -19,6 +19,7 @@ typedef enum ecs_component_type {
   ECS_COMPONENT_COLLIDER,
   ECS_COMPONENT_PROPULSION,
   ECS_COMPONENT_HEALTH,
+  ECS_COMPONENT_BEHAVIOR,
   ECS_COMPONENT_KEYBOARD_LISTENER,
   ECS_COMPONENT_MOUSE_LISTENER,
   NUM_COMPONENT_TYPES
@@ -62,6 +63,8 @@ typedef struct Collider {
 
 /** component allowing an \ref ecs_entity to move */
 typedef struct Propulsion {
+  /** if true, propulsion applies in direction of unit angle */
+  bool directed;
   /** acceleration applied for linear movement (pixels/sec) */
   double linear_accel;
   /** acceleration applied for rotation (radians/sec) */
@@ -90,6 +93,12 @@ typedef struct Timer {
   /** action to perform on owner entity when \ref time_left == 0 */
   ecs_entity_trigger timer_trigger;
 } Timer;
+
+
+/** comonent that causes an entity to act autonomously */
+typedef struct Behavior {
+  struct ecs_entity *target;  ///< target of interest
+} Behavior;
 
 typedef struct KeyboardListener {
   ecs_keyboard_handler handler;

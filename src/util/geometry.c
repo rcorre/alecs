@@ -39,10 +39,28 @@ double vector_dist(vector v1, vector v2) {
 }
 
 double vector_angle(vector v) {
-  return atan2(v.y, v.x);
+  return normalize_angle(atan2(v.y, v.x));
+}
+
+vector vector_rotate(vector v, double angle) {
+  return (vector) {
+    .x = v.x * cos(angle) - v.y * sin(angle),
+    .y = v.y * cos(angle) + v.x * sin(angle)
+  };
 }
 
 bool rect_contains_point(rectangle r, point p) {
   return 
     (r.x <= p.x) && (p.x <= r.x + r.w) && (r.y <= p.y) && (p.y <= r.y + r.h);
+}
+
+double normalize_angle(double angle) {
+  while (angle < 0) { angle += 2 * PI; }
+  while (angle >= 2 * PI) { angle -= 2 * PI; }
+  return angle;
+}
+
+double angle_between(double from, double to) {
+  double dif = from - to;
+  return (abs(dif) < PI) ? dif : -dif;
 }

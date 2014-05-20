@@ -17,6 +17,9 @@ static void propulsion_update(ecs_component *comp) {
   Propulsion p = comp->propulsion;
   Body *b = &comp->owner_entity->components[ECS_COMPONENT_BODY]->body;
   vector dxy = vector_scale(p.linear_throttle, p.linear_accel * elapsed_time);
+  if (p.directed) {
+    dxy = vector_rotate(dxy, comp->owner_entity->angle);
+  }
   double rotation =  p.angular_accel * p.angular_throttle * elapsed_time;
   b->velocity = vector_add(b->velocity, dxy);
   b->angular_velocity += rotation;

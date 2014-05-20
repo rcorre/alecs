@@ -37,10 +37,14 @@ debug: $(SOURCE_FILES)
 release: $(SOURCE_FILES)
 	$(CC) $(REL_FLAGS) -o $(EXECUTABLE) $(SRC_FILES) -I $(INC_DIR) $(LIBS)
 
-test: test-stringmap
+test: test-stringmap test-geometry
 
 test-stringmap: $(TEST_SRC) test/test_stringmap.c
 	$(CC) $(DBG_FLAGS) -o bin/test_stringmap test/test_stringmap.c $(TEST_SRC) \
+		-I $(INC_DIR) $(LIBS)
+
+test-geometry: $(TEST_SRC) test/test_geometry.c
+	$(CC) $(DBG_FLAGS) -o bin/test_geometry test/test_geometry.c $(TEST_SRC) \
 		-I $(INC_DIR) $(LIBS)
 
 clean:

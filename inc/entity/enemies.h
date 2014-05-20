@@ -3,7 +3,8 @@
 
 #include "ecs.h"
 #include "system/weapon_sys.h"
+#include "system/behavior_sys.h"
 
-ecs_entity* spawn_enemy(vector pos);
+ecs_entity* spawn_enemy(vector pos, ecs_entity *player);
 
 #endif /* end of include guard: ENEMIES_H */

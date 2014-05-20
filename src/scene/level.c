@@ -7,10 +7,24 @@ static ecs_entity *player_ship;
 static ALLEGRO_FONT *main_font;
 static double next_enemy_time;
 
+// TODO: testing only
+static Weapon current_weapon = {
+  .name = "seeker",
+  .particle_effect = "seeker-rocket",
+  .max_lockons = 5,
+  .lockon_time = 0.5,
+  .initial_speed = 100,
+  .max_speed = 500,
+  .acceleration = 500,
+  .angular_accel = PI,
+  .power = 5,
+  .radius = 20
+};
+
 static bool level_update(double time) {
   next_enemy_time -= time;
   if (next_enemy_time <= 0) {
-    spawn_enemy(rand_point((rectangle){0,0,SCREEN_W, SCREEN_H}));
+    spawn_enemy(rand_point((rectangle){0,0,SCREEN_W, SCREEN_H}), player_ship);
     next_enemy_time = enemy_time;
   }
   return run;
@@ -38,6 +52,7 @@ static void level_shutdown() {
 scene level_new(void) {
   main_font = al_game_get_font("LiberationMono-Regular");
   player_ship = make_player_ship();
+  weapon_system_set_weapons(&current_weapon, &current_weapon);
   return (scene){
     .update = level_update,
     .draw = level_draw,

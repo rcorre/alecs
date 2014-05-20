@@ -3,6 +3,22 @@
 
 #include "ecs.h"
 
+typedef struct Weapon {
+  const char *name;
+  const char *particle_effect;
+  int max_lockons;
+  double lockon_time;
+  double initial_speed;
+  double max_speed;
+  double acceleration;
+  double angular_accel;
+  double power;
+  double radius;
+} Weapon;
+
+/** set weapons for the weapon system */
+void weapon_system_set_weapons(Weapon *primary, Weapon *secondary);
+
 /** update the weapon system */
 void weapon_system_fn(double time);
 
@@ -16,6 +32,9 @@ void weapon_set_target(struct ecs_entity *target);
 void weapon_clear_target(struct ecs_entity *target);
 
 /** fire the current weapon */
-void weapon_fire();
+void weapon_fire(struct ecs_entity *launcher);
+
+/** switch between primary and secondary weapon */
+void weapon_swap();
 
 #endif /* end of include guard: WEAPON_SYS_H */

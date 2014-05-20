@@ -30,6 +30,7 @@ static void update_body(ecs_component *body_comp) {
   vector displacement = vector_scale(body->velocity, elapsed_time);
   entity->position = vector_add(displacement, entity->position);
   entity->angle += body->angular_velocity * elapsed_time;
+  entity->angle = normalize_angle(entity->angle);
   if (out_of_bounds(entity, body)) {
     ecs_entity_free(entity);
   }
