@@ -7,7 +7,7 @@ ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   // body
   Body *bod = &ecs_add_component(enemy, ECS_COMPONENT_BODY)->body;
   bod->max_linear_velocity = 200;
-  bod->max_angular_velocity = 2*PI;
+  bod->max_angular_velocity = 1*PI;
   // collider
   Collider *col = &ecs_add_component(enemy, ECS_COMPONENT_COLLIDER)->collider;
   col->rect = hitrect_from_sprite(enemy->sprite);
@@ -21,7 +21,7 @@ ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   // propulsion
   Propulsion *pro = &ecs_add_component(enemy, ECS_COMPONENT_PROPULSION)->propulsion;
   pro->linear_accel = 100;
-  pro->angular_accel = 8*PI;
+  pro->angular_accel = 18*PI;
   pro->directed = true;
   // behavior
   Behavior *beh = &ecs_add_component(enemy, ECS_COMPONENT_BEHAVIOR)->behavior;

@@ -61,6 +61,5 @@ double normalize_angle(double angle) {
 }
 
 double angle_between(double from, double to) {
-  double dif = from - to;
-  return (abs(dif) < PI) ? dif : -dif;
+  return (to > from) ? 2*PI - to - from : to - from;
 }

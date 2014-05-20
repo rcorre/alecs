@@ -62,7 +62,7 @@ static void limit_speed(Body *b) {
   if (linear_factor > 1) {
     b->velocity = vector_scale(b->velocity, 1 / linear_factor);
   }
-  double angular_factor = b->angular_velocity / b->max_angular_velocity;
+  double angular_factor = abs(b->angular_velocity / b->max_angular_velocity);
   if (angular_factor > 1) {
     b->angular_velocity = b->angular_velocity / angular_factor;
   }
