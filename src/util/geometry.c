@@ -57,9 +57,9 @@ bool rect_contains_point(rectangle r, point p) {
 double normalize_angle(double angle) {
   while (angle < 0) { angle += 2 * PI; }
   while (angle >= 2 * PI) { angle -= 2 * PI; }
-  return angle;
+  return (angle > PI) ? (angle - 2 * PI) : angle;
 }
 
 double angle_between(double from, double to) {
-  return (to > from) ? 2*PI - to - from : to - from;
+  return normalize_angle(to) - normalize_angle(from);
 }

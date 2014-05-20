@@ -61,10 +61,9 @@ double vector_angle(vector v);
 vector vector_rotate(vector v, double angle);
 /** return true if p is contained by r */
 bool rect_contains_point(rectangle r, point p);
-/** normalize an angle (radians) so it falls between 0 and 2 * PI */
+/** normalize an angle (radians) so it falls between -PI and PI */
 double normalize_angle(double angle);
-/** return shortest angle from \c to to \c from
- *  angle1 and angle2 should be \b normalized angles (in radians) */
+/** return shortest angle from \c to to \c from */
 double angle_between(double to, double from);
 
 #endif /* end of include guard: GEOMETRY_H */
