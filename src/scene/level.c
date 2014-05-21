@@ -1,6 +1,6 @@
 #include "scene/level.h"
 
-static const double enemy_time = 1.0;
+static const double enemy_time = 3.0;
 
 static bool run = true;
 static ecs_entity *player_ship;
@@ -16,7 +16,7 @@ static Weapon current_weapon = {
   .initial_speed = 100,
   .max_speed = 500,
   .acceleration = 500,
-  .angular_accel = PI,
+  .turn_rate = PI,
   .power = 5,
   .radius = 20
 };
@@ -38,6 +38,9 @@ static void level_draw(void) {
 }
 
 static void level_handle_mouse(ALLEGRO_MOUSE_EVENT ev) {
+  if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+    weapon_fire(player_ship);
+  }
 }
 
 static void level_handle_keyboard(ALLEGRO_KEYBOARD_EVENT ev) {

@@ -12,10 +12,11 @@ static list *lockon_list;
 static struct ecs_entity *firing_entity;
 static Weapon *current_weapon, *alternate_weapon;
 
-static void fire_at_target(struct ecs_entity *ent);
+static void fire_at_target(struct ecs_entity *target);
+static void draw_lockon(struct ecs_entity *target);
 
 void weapon_system_fn(double time) {
-  if (current_target != NULL) {
+  if (current_target) {
     current_lockon_time += time;
     if (current_lockon_time > current_weapon->lockon_time) {
       list_push(lockon_list, current_target);
@@ -25,15 +26,18 @@ void weapon_system_fn(double time) {
 }
 
 void weapon_system_draw() {
-  if (current_target != NULL) {
+  if (current_target) {
     al_draw_arc(current_target->position.x, current_target->position.y,
         indicator_radius, 0, current_lockon_time * 25, PRIMARY_LOCK_COLOR,
         indicator_thickness);
   }
+  if (lockon_list) {
+    list_each(lockon_list, (list_lambda)draw_lockon);
+  }
 }
 
 void weapon_set_target(struct ecs_entity *target) {
-  if (current_target != target) {
+  if (current_target == NULL) {
     current_lockon_time = 0;  // new target
     current_target = target;
   }
@@ -66,7 +70,30 @@ void weapon_swap() {
   weapon_clear_target(current_target);
 }
 
-static void fire_at_target(struct ecs_entity *ent) {
+static void fire_at_target(struct ecs_entity *target) {
   struct ecs_entity *projectile = ecs_entity_new(firing_entity->position);
+  projectile->position = firing_entity->position;
+  projectile->angle = -PI / 2;
+  ecs_attach_sprite(projectile, "seeker", -1);
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
+  b->max_linear_velocity = current_weapon->max_speed; 
+  Propulsion *p =
+    &ecs_add_component(projectile, ECS_COMPONENT_PROPULSION)->propulsion;
+  p->linear_accel = current_weapon->acceleration;
+  p->turn_rate = current_weapon->turn_rate;
+  p->particle_effect =
+    get_particle_generator((char*)current_weapon->particle_effect);
+  p->directed = true;
+  Behavior *behavior = &ecs_add_component(projectile,
+      ECS_COMPONENT_BEHAVIOR)->behavior; 
+  behavior->target = target;
+  Collider *collider = &ecs_add_component(projectile,
+      ECS_COMPONENT_COLLIDER)->collider; 
+  collider->rect = hitrect_from_sprite(projectile->sprite);
+}
+
+static void draw_lockon(struct ecs_entity *target) {
+    al_draw_arc(target->position.x, target->position.y,
+        indicator_radius, 0, 2 * PI, PRIMARY_LOCK_COLOR,
+        indicator_thickness);
 }

@@ -11,7 +11,7 @@ typedef struct Weapon {
   double initial_speed;
   double max_speed;
   double acceleration;
-  double angular_accel;
+  double turn_rate;
   double power;
   double radius;
 } Weapon;
