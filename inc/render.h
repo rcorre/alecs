@@ -13,6 +13,12 @@
 #define SPRITE_LAYER_LIMIT 5
 #define SPRITE_LAYER_COUNT (2 * SPRITE_LAYER_LIMIT + 1)
 
+typedef enum AnimationType {
+  ANIMATE_OFF,
+  ANIMATE_ONCE,
+  ANIMATE_LOOP
+} AnimationType;
+
 /** \ref component that draws a bitmap to the screen */
 typedef struct sprite {
   /** source bitmap used to draw sprite */
@@ -31,6 +37,13 @@ typedef struct sprite {
   int _depth;
   /** node holding sprite in backing sprite store - DO NOT MODIFY */
   list_node *_node;
+  int frame_width;       ///< width of a single frame within the spritesheet
+  int frame_height;      ///< width of a single frame within the spritesheet
+  double animation_rate; ///< frames/sec
+  double _animation_timer; ///< countdown till next frame
+  AnimationType animation_type; ///< how to animate sprite (if at all)
+  bool destroy_on_animation_end; //< if true, destroy entity when animation done
+  int current_frame;  ///< frame currently being displayed
 } sprite;
 
 /** initialize sprite framework */
@@ -63,5 +76,8 @@ int sprite_width(sprite *s);
 
 /** return the height of a sprite (taking scaling into account) */
 int sprite_height(sprite *s);
+
+/** return the number of animation frames for a sprite */
+int sprite_num_frames(sprite *s);
 
 #endif /* end of include guard: RENDER_H */

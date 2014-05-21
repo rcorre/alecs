@@ -3,6 +3,7 @@
 // each layer stores a list of sprites to be drawn at that layer
 list *sprite_layers[SPRITE_LAYER_LIMIT * 2 + 1];
 
+static double elapsed_time; // time for current update (draw) call
 static void draw_sprite(sprite *s);
 static list* get_sprite_layer(int layernum);
 static ALLEGRO_FONT *debug_font;
@@ -26,7 +27,7 @@ void sprite_shutdown() {
 
 sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle, 
     int depth) {
-  sprite *s = malloc(sizeof(sprite));
+  sprite *s = calloc(1, sizeof(sprite));
   ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
   assert(bmp != NULL);
   s->bitmap = bmp;
@@ -41,6 +42,10 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
   // give sprite back-reference to its node so it may be removed when freed
   s->_node = list_push(get_sprite_layer(depth), s);
   s->_depth = depth;
+  // default to using full sprite
+  s->frame_width = al_get_bitmap_width(bmp);
+  s->frame_height = al_get_bitmap_height(bmp);
+  // TODO: set animation timer
   return s;
 }
 
@@ -56,7 +61,8 @@ void sprite_set_depth(sprite *sprite, int depth) {
   sprite->_node = list_push(get_sprite_layer(depth), sprite);
 }
 
-void render_all_sprites() {
+void render_all_sprites(double time) {
+  elapsed_time = time;
   for (int layer = 0; layer < SPRITE_LAYER_COUNT; layer++) {
     list *sprites = sprite_layers[layer];
     list_each(sprites, (list_lambda)draw_sprite);
@@ -64,8 +70,31 @@ void render_all_sprites() {
 }
 
 static void draw_sprite(sprite *s) {
-  al_draw_tinted_scaled_rotated_bitmap(
+  if (s->animation_type != ANIMATE_OFF) {
+    s->_animation_timer -= elapsed_time;
+    if (s->_animation_timer < 0) {
+      s->_animation_timer = 1 / s->animation_rate;
+      // move to next frame, check if it is past the last frame
+      if (++(s->current_frame) == sprite_num_frames(s)) {
+        switch(s->animation_type) {
+          case ANIMATE_ONCE:
+            s->animation_type = ANIMATE_OFF;
+            break;
+          case ANIMATE_LOOP:
+            s->current_frame = 0;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  int sx = s->current_frame * s->frame_width; // section x coordinate
+  
+  al_draw_tinted_scaled_rotated_bitmap_region(
       s->bitmap,                              // sprite bitmap
+      sx, 0, s->frame_width, s->frame_height, // section
       s->tint,                                // sprite color
       s->center.x, s->center.y,               // center of bitmap
       s->position_ptr->x, s->position_ptr->y, // location to draw center to
@@ -95,4 +124,8 @@ int sprite_width(sprite *s) {
 
 int sprite_height(sprite *s) {
   return al_get_bitmap_height(s->bitmap) * s->scale.y;
+}
+
+int sprite_num_frames(sprite *s) {
+  return al_get_bitmap_width(s->bitmap) / s->frame_width;
 }

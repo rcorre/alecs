@@ -105,7 +105,6 @@ typedef struct Timer {
   ecs_entity_trigger timer_trigger;
 } Timer;
 
-
 /** comonent that causes an entity to act autonomously */
 typedef struct Behavior {
   struct ecs_entity *target;  ///< target of interest
