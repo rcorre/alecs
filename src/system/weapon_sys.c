@@ -7,7 +7,7 @@ static const float indicator_thickness = 3;
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
 
 // explosion constants
-static const double explosion_animate_rate = 30; // frames/sec
+static const double explosion_animate_rate = 25; // frames/sec
 
 static struct ecs_entity *current_target;
 static double current_lockon_time;
@@ -108,6 +108,8 @@ static void draw_lockon(struct ecs_entity *target) {
 
 static void explode(struct ecs_entity *projectile, void *weapon_data) {
   ecs_entity *boom = ecs_entity_new(projectile->position);
-  ecs_attach_sprite(boom, "explosion", 1);
+  sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
+      explosion_animate_rate, ANIMATE_ONCE); 
+  anim->scale = (vector){3,3};
   ecs_entity_free(projectile);
 }

@@ -68,6 +68,17 @@ sprite* ecs_attach_sprite(ecs_entity *entity, const char *name, int depth) {
   return s;
 }
 
+sprite* ecs_attach_animation(ecs_entity *entity, const char *name, int depth,
+    int frame_width, int frame_height, double animation_rate, AnimationType
+    type)
+{
+  assert(entity->sprite == NULL); // shouldn't have sprite already sprite* s =
+  sprite *s = animation_new(name, &(entity->position), &(entity->angle), depth,
+      frame_width, frame_height, animation_rate, type);
+  entity->sprite = s;
+  return s;
+}
+
 void ecs_remove_sprite(ecs_entity *entity) {
   if (entity->sprite != NULL) {
     sprite_free(entity->sprite);

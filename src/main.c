@@ -10,6 +10,7 @@
 #include "scene/level.h"
 
 static double last_frame_time; // when the last update occured
+static double elapsed_time;    // time elapsed for current update
 
 // compute frame time and update all systems. return current fps
 static bool main_update();
@@ -62,6 +63,7 @@ int main(int argc, char *argv[]) {
 static bool main_update() {
   double cur_time = al_get_time();
   double delta = cur_time - last_frame_time; // time elapsed since last frame
+  elapsed_time = delta;
   last_frame_time = cur_time;
   ecs_update_systems(delta);      // update every system
   update_particles(delta);
@@ -72,7 +74,7 @@ static bool main_update() {
 static void main_draw() {
   al_clear_to_color(scene_bg_color);
   draw_particles();
-  render_all_sprites();
+  render_all_sprites(elapsed_time);
   weapon_system_draw();
   scene_draw(); // the scene may draw something in addition to sprites (UI)
   al_flip_display();

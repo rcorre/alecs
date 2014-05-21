@@ -14,9 +14,9 @@
 #define SPRITE_LAYER_COUNT (2 * SPRITE_LAYER_LIMIT + 1)
 
 typedef enum AnimationType {
-  ANIMATE_OFF,
-  ANIMATE_ONCE,
-  ANIMATE_LOOP
+  ANIMATE_OFF,  ///< don't animate
+  ANIMATE_ONCE, ///< run from start to end of animation one time
+  ANIMATE_LOOP  ///< loop back to start of animation after last frame reached
 } AnimationType;
 
 /** \ref component that draws a bitmap to the screen */
@@ -61,6 +61,21 @@ void sprite_shutdown();
 **/
 sprite* sprite_new(const char *name, vector *ref_position,
     double *ref_angle, int depth);
+
+/** create a new animated sprite
+  * \param name name of bitmap resource to load
+  * \param ref_position pointer to position of owner
+  * \param ref_angle pointer to rotation of owner
+  * \param depth layer at which to draw sprite
+  * \param frame_width width in px of a single frame of the animation
+  * \param frame_height height in px of a single frame of the animation
+  * \param animation_rate frame cycle rate in frames/second
+  * \param type behavior of animation upon reaching end
+  * \return return value description
+**/
+sprite* animation_new(const char *name, vector *ref_position, double *ref_angle, 
+    int depth, int frame_width, int frame_height, double animation_rate,
+    AnimationType type);
 
 /** delete a sprite*/
 void sprite_free(sprite *sprite);

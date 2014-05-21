@@ -45,7 +45,35 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
   // default to using full sprite
   s->frame_width = al_get_bitmap_width(bmp);
   s->frame_height = al_get_bitmap_height(bmp);
-  // TODO: set animation timer
+  s->animation_type = ANIMATE_OFF;
+  return s;
+}
+
+sprite* animation_new(const char *name, vector *ref_position, double *ref_angle, 
+    int depth, int frame_width, int frame_height, double animation_rate,
+    AnimationType type) 
+{ 
+  sprite *s = calloc(1, sizeof(sprite));
+  ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
+  assert(bmp != NULL);
+  s->bitmap = bmp;
+  s->center = (vector) {
+    .x = frame_width / 2,
+    .y = frame_height / 2
+  };
+  s->scale = (vector){1, 1};
+  s->tint = al_map_rgb(255,255,255);
+  s->position_ptr = ref_position;
+  s->angle_ptr = ref_angle;
+  // give sprite back-reference to its node so it may be removed when freed
+  s->_node = list_push(get_sprite_layer(depth), s);
+  s->_depth = depth;
+  // default to using full sprite
+  s->frame_width = frame_width;
+  s->frame_height = frame_height;
+  s->animation_rate = animation_rate;
+  s->_animation_timer = 1 / animation_rate;
+  s->animation_type = type;
   return s;
 }
 
@@ -105,6 +133,9 @@ static void draw_sprite(sprite *s) {
 #ifndef NDEBUG
   al_draw_textf(debug_font, al_map_rgb(255,0,0), s->position_ptr->x, 
       s->position_ptr->y, 0, "angle: %3.3f", *s->angle_ptr);
+  al_draw_textf(debug_font, al_map_rgb(0,0,255), s->position_ptr->x, 
+      s->position_ptr->y + 30, 0, "pos: <%3d,%3d>", (int)s->position_ptr->x,
+      (int)s->position_ptr->y); 
 #endif
 }
 
@@ -119,11 +150,11 @@ static list* get_sprite_layer(int layernum) {
 }
 
 int sprite_width(sprite *s) {
-  return al_get_bitmap_width(s->bitmap) * s->scale.x;
+  return s->frame_height * s->scale.x;
 }
 
 int sprite_height(sprite *s) {
-  return al_get_bitmap_height(s->bitmap) * s->scale.y;
+  return s->frame_width * s->scale.y;
 }
 
 int sprite_num_frames(sprite *s) {

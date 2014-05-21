@@ -128,6 +128,20 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type);
 **/
 sprite* ecs_attach_sprite(ecs_entity *entity, const char *name, int depth);
 
+/** attach an animated sprite to an entity
+  * \param entity entity to which sprite should be attached
+  * \param name key to identify sprite
+  * \param depth layer at which sprite should be drawn
+  * \param frame_width width in px of a single frame of the animation
+  * \param frame_height height in px of a single frame of the animation
+  * \param animation_rate frame cycle rate in frames/second
+  * \param type behavior of animation upon reaching end
+  * \return return value description
+**/
+sprite* ecs_attach_animation(ecs_entity *entity, const char *name, int depth,
+    int frame_width, int frame_height, double animation_rate, AnimationType
+    type);
+
 /** remove and free sprite attached to an entity
   * \param entity entity from which to remove sprite
 **/
