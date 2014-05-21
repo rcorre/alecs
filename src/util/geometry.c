@@ -61,5 +61,5 @@ double normalize_angle(double angle) {
 }
 
 double angle_between(double from, double to) {
-  return normalize_angle(to) - normalize_angle(from);
+  return normalize_angle(normalize_angle(to) - normalize_angle(from));
 }

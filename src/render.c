@@ -5,12 +5,17 @@ list *sprite_layers[SPRITE_LAYER_LIMIT * 2 + 1];
 
 static void draw_sprite(sprite *s);
 static list* get_sprite_layer(int layernum);
+static ALLEGRO_FONT *debug_font;
 
 void sprite_init() {
   for (int i = 0; i < SPRITE_LAYER_COUNT; i++) {
     assert(sprite_layers[i] == NULL); // assert not already initialized
     sprite_layers[i] = list_new();    // create a new list for each depth layer
   }
+
+#ifndef NDEBUG
+  debug_font = al_game_get_font("LiberationMono-Regular");
+#endif
 }
 
 void sprite_shutdown() {
@@ -68,6 +73,10 @@ static void draw_sprite(sprite *s) {
       *(s->angle_ptr),                        // rotation of entity
       0                                       // horiz/vert flip
   );
+#ifndef NDEBUG
+  al_draw_textf(debug_font, al_map_rgb(255,0,0), s->position_ptr->x, 
+      s->position_ptr->y, 0, "angle: %3.3f", *s->angle_ptr);
+#endif
 }
 
 static list* get_sprite_layer(int layernum) {

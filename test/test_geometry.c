@@ -73,4 +73,5 @@ int main(int argc, char *argv[]) {
   assert(almost_equal(angle_between(PI/3, 5*PI/3), -2*PI/ 3));
   assert(almost_equal(angle_between(-PI, PI), 0));
   assert(almost_equal(angle_between(PI, -PI), 0));
+  assert(almost_equal(angle_between(-2*PI/3, 2*PI/3), -2*PI/3));
 }
