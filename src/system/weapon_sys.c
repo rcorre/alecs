@@ -17,6 +17,7 @@ static Weapon *current_weapon, *alternate_weapon;
 
 static void fire_at_target(struct ecs_entity *target);
 static void draw_lockon(struct ecs_entity *target);
+static void explode(struct ecs_entity *projectile, void *weapon_data);
 
 void weapon_system_fn(double time) {
   if (current_target) {
@@ -93,7 +94,9 @@ static void fire_at_target(struct ecs_entity *target) {
   Collider *collider = &ecs_add_component(projectile,
       ECS_COMPONENT_COLLIDER)->collider; 
   collider->rect = hitrect_from_sprite(projectile->sprite);
-  collider->on_collision = ecs_entity_free;
+  collider->on_collision = (ecs_entity_delegate) {
+    .delegate = explode, .data = current_weapon
+  };
   projectile->team = TEAM_FRIENDLY;
 }
 
@@ -101,4 +104,10 @@ static void draw_lockon(struct ecs_entity *target) {
     al_draw_arc(target->position.x, target->position.y,
         indicator_radius, 0, 2 * PI, PRIMARY_LOCK_COLOR,
         indicator_thickness);
+}
+
+static void explode(struct ecs_entity *projectile, void *weapon_data) {
+  ecs_entity *boom = ecs_entity_new(projectile->position);
+  ecs_attach_sprite(boom, "explosion", 1);
+  ecs_entity_free(projectile);
 }

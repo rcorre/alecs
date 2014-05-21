@@ -27,7 +27,20 @@ typedef enum ecs_component_type {
 
 /** forward declaration of \ref ecs_entity, defined in \ref ecs.h */
 struct ecs_entity;
+/** function pointer attached to a \ref ecs_component.
+ *  when called, it is passed the owner entity*/
 typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
+/** function pointer attached to a \ref ecs_component.
+ *  when called, it is passed the owner entity and some other data */
+typedef void (*ecs_delegate_fn)(struct ecs_entity *ent, void *data);
+/** can be attached to various components to set up a future action.
+ *  upon triggering, the delegate function is passed a pointer to the owner
+ *  entity as well as the additional data included in the struct */
+typedef struct ecs_entity_delegate {
+  ecs_delegate_fn delegate;
+  void *data;
+} ecs_entity_delegate;
+
 typedef void (*ecs_mouse_handler)(struct ecs_entity *ent, bool lmb, bool rmb);
 /** action to be taken on keypress
  *  \param ent pointer to the entity that holds the keyboard handler
@@ -56,7 +69,7 @@ typedef struct Collider {
   /** if true, owner will bounce when colliding with level bounds */
   bool keep_inside_level;
   /** action to take when a collision is detected */
-  ecs_entity_trigger on_collision;
+  ecs_entity_delegate on_collision;
 } Collider;
 
 /** component allowing an \ref ecs_entity to move */
