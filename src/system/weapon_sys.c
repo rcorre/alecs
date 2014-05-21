@@ -1,10 +1,13 @@
 #include "system/weapon_sys.h"
 
+// lockon constants
 static const float indicator_radius = 12;
 static const float indicator_thickness = 3;
-
 #define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 128)
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
+
+// explosion constants
+static const double explosion_animate_rate = 30; // frames/sec
 
 static struct ecs_entity *current_target;
 static double current_lockon_time;
