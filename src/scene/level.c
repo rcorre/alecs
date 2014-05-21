@@ -14,9 +14,9 @@ static Weapon current_weapon = {
   .max_lockons = 5,
   .lockon_time = 0.5,
   .initial_speed = 100,
-  .max_speed = 500,
-  .acceleration = 500,
-  .turn_rate = PI,
+  .max_speed = 100,
+  .acceleration = 1200,
+  .turn_rate = 2 * PI,
   .power = 5,
   .radius = 20
 };

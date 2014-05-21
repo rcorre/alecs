@@ -25,7 +25,8 @@ static void propulsion_update(ecs_component *comp) {
   comp->owner_entity->angle = normalize_angle(comp->owner_entity->angle);
   // handle particle effect
   if (p.particle_effect.data != NULL) {
-    p.particle_effect.angle = PI - comp->owner_entity->angle;
+    //spawn in opposite direction of entity
+    p.particle_effect.angle = comp->owner_entity->angle + PI;
     p.particle_effect.position = comp->owner_entity->position;
     spawn_particles(&p.particle_effect, elapsed_time, 1.0, b->velocity);
   }
