@@ -55,6 +55,8 @@ typedef struct Collider {
   rectangle rect;
   /** if true, owner will bounce when colliding with level bounds */
   bool keep_inside_level;
+  /** action to take when a collision is detected */
+  ecs_entity_trigger on_collision;
 } Collider;
 
 /** component allowing an \ref ecs_entity to move */

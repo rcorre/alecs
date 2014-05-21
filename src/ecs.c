@@ -89,6 +89,10 @@ void ecs_free_all_entities() {
   list_clear(ecs_entities, (list_lambda)ecs_entity_free);
 }
 
+bool ecs_same_team(ecs_entity *e1, ecs_entity *e2) {
+  return (e1->team & e2->team);
+}
+
 void ecs_shutdown() {
   list_free(ecs_systems, NULL);
   // use list each instead of list_free - ecs_entity_free handles removal of

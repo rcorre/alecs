@@ -1,18 +1,38 @@
 #include "system/collision_sys.h"
 
 static void try_boundary_collision(ecs_entity *entity, Collider *collider);
+static void try_entity_collision(ecs_entity *e1, Collider *c1, ecs_entity *e2,
+    Collider *c2);
 
 void collision_system_fn(double time) {
-  list *collider_list = ecs_component_store[ECS_COMPONENT_COLLIDER];
-  list_node *node = collider_list->head;
-  for(; node != NULL ; node = node->next) {
+  list_node *node = ecs_component_store[ECS_COMPONENT_COLLIDER]->head;
+  while(node) {
+    list_node *temp = node->next;
     ecs_component *comp = node->value;
     assert(comp->type == ECS_COMPONENT_COLLIDER);
     ecs_entity *entity = comp->owner_entity;    // entity owning collider
     Collider *collider = &comp->collider; // collider component
+    collider->rect.x = entity->position.x - collider->rect.w / 2.0;
+    collider->rect.y = entity->position.y - collider->rect.h / 2.0;
     if (collider->keep_inside_level) {
       try_boundary_collision(entity, collider);
     }
+    // check collision against other colliders
+    list_node *other = node->next;
+    while(other) {
+      list_node *temp_other = other->next;
+      ecs_component *other_comp = other->value;
+      assert(comp->type == ECS_COMPONENT_COLLIDER);
+      Collider *other_col = &other_comp->collider;
+      ecs_entity *other_entity = other_comp->owner_entity;
+      if (!(ecs_same_team(entity, other_entity))) {
+        try_entity_collision(entity, collider, other_entity, other_col);
+      }
+      // check if the current collider was removed from the current entity
+      if (entity->components[ECS_COMPONENT_COLLIDER] != comp) {break;}
+      other = temp_other;
+    }
+    node = temp;
   }
 }
 
@@ -46,5 +66,15 @@ static void try_boundary_collision(ecs_entity *entity, Collider *collider) {
   if (bottom >= SCREEN_H) {
     center->y -= bottom - SCREEN_H;
     body->velocity.y = 0;
+  }
+}
+
+static void try_entity_collision(ecs_entity *e1, Collider *c1, ecs_entity *e2,
+    Collider *c2)
+{
+  if (rect_intersect(c1->rect, c2->rect)) {
+    // run collision handlers if they exist
+    if (c1->on_collision) {c1->on_collision(e1);}
+    if (c2->on_collision) {c2->on_collision(e2);}
   }
 }

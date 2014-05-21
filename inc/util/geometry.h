@@ -61,6 +61,8 @@ double vector_angle(vector v);
 vector vector_rotate(vector v, double angle);
 /** return true if p is contained by r */
 bool rect_contains_point(rectangle r, point p);
+/** return true if rectangles intersect*/
+bool rect_intersect(rectangle r1, rectangle r2);
 /** normalize an angle (radians) so it falls between -PI and PI */
 double normalize_angle(double angle);
 /** return shortest angle from \c to to \c from */

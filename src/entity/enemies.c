@@ -25,5 +25,6 @@ ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   // behavior
   Behavior *beh = &ecs_add_component(enemy, ECS_COMPONENT_BEHAVIOR)->behavior;
   beh->target = player;
+  enemy->team = TEAM_ENEMY;
   return enemy;
 }

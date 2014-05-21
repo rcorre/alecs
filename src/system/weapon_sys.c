@@ -90,6 +90,8 @@ static void fire_at_target(struct ecs_entity *target) {
   Collider *collider = &ecs_add_component(projectile,
       ECS_COMPONENT_COLLIDER)->collider; 
   collider->rect = hitrect_from_sprite(projectile->sprite);
+  collider->on_collision = ecs_entity_free;
+  projectile->team = TEAM_FRIENDLY;
 }
 
 static void draw_lockon(struct ecs_entity *target) {

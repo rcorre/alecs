@@ -54,6 +54,19 @@ bool rect_contains_point(rectangle r, point p) {
     (r.x <= p.x) && (p.x <= r.x + r.w) && (r.y <= p.y) && (p.y <= r.y + r.h);
 }
 
+bool rect_intersect(rectangle r1, rectangle r2) {
+  point topleft   = { r1.x, r1.y };
+  point topright  = { r1.x + r1.w, r1.y };
+  point botleft   = { r1.x, r1.y + r1.h };
+  point botright  = { r1.x + r1.w, r1.y + r1.h };
+  point r2topleft = { r2.x, r2.y };
+  return (rect_contains_point(r2, topleft)  ||
+          rect_contains_point(r2, botleft)  ||
+          rect_contains_point(r2, botright) ||
+          rect_contains_point(r2, topright) ||
+          rect_contains_point(r1, r2topleft));
+}
+
 double normalize_angle(double angle) {
   while (angle < 0) { angle += 2 * PI; }
   while (angle >= 2 * PI) { angle -= 2 * PI; }

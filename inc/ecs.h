@@ -48,6 +48,13 @@ typedef struct ecs_component {
   };
 } ecs_component;
 
+typedef enum ecs_entity_team {
+  TEAM_NEUTRAL  = 0x0,
+  TEAM_FRIENDLY = 0x1,
+  TEAM_ENEMY    = 0x2
+} ecs_entity_team;
+
+
 /** a game object composed of \ref ecs_components */
 typedef struct ecs_entity {
   /** absolute location of entity's center */
@@ -59,6 +66,8 @@ typedef struct ecs_entity {
   /** sprite determining how entity is rendered.
    *  may be NULL to if entity has no visual representation. */
   sprite *sprite;
+  /** which team the entity is on */
+  ecs_entity_team team;
   /** pointer to node in entity list - DO NOT MODIFY */
   list_node *_node;
 } ecs_entity;
@@ -130,6 +139,9 @@ void ecs_update_systems(double time);
 
 /** free every active \ref ecs_entity and every attached \ref ecs_component */
 void ecs_free_all_entities();
+
+/** returns true if entities are on the same team and neither is neutral */
+bool ecs_same_team(ecs_entity *e1, ecs_entity *e2);
 
 /** clean up all resources allocated by the ECS framework. */
 void ecs_shutdown();

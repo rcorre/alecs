@@ -21,6 +21,7 @@ ecs_entity* make_player_ship() {
   Collider *col = &ecs_add_component(player, ECS_COMPONENT_COLLIDER)->collider;
   col->rect = hitrect_from_sprite(player->sprite);
   col->keep_inside_level = true;
+  player->team = TEAM_FRIENDLY;
   return player;
 }
 
