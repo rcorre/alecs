@@ -32,6 +32,15 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec) {
   cloud_delay = 1 / cloud_max_depth;
 }
 
+void scenery_add_background(const char *name, int depth, double speed, int
+    offset) 
+{ 
+  ecs_entity *bg = ecs_entity_new((vector){SCREEN_W / 2 + offset, SCREEN_H / 2});
+  sprite* s = ecs_attach_sprite(bg, name, depth);
+  Body *body = &ecs_add_component(bg, ECS_COMPONENT_BODY)->body;
+  make_constant_vel_body(body, (vector){-speed, 0});
+}
+
 static void make_cloud() {
   double start_y = randd(0, SCREEN_H);
   double start_x = SCREEN_W + 200;
