@@ -25,7 +25,7 @@ void sprite_shutdown() {
   }
 }
 
-sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle, 
+sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
     int depth) {
   sprite *s = calloc(1, sizeof(sprite));
   ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
@@ -49,10 +49,10 @@ sprite* sprite_new(const char *name, vector *ref_position, double *ref_angle,
   return s;
 }
 
-sprite* animation_new(const char *name, vector *ref_position, double *ref_angle, 
+sprite* animation_new(const char *name, vector *ref_position, double *ref_angle,
     int depth, int frame_width, int frame_height, double animation_rate,
-    AnimationType type) 
-{ 
+    AnimationType type)
+{
   sprite *s = calloc(1, sizeof(sprite));
   ALLEGRO_BITMAP *bmp = al_game_get_bitmap(name);
   assert(bmp != NULL);
@@ -92,6 +92,7 @@ void sprite_set_depth(sprite *sprite, int depth) {
 void render_all_sprites(double time) {
   elapsed_time = time;
   for (int layer = 0; layer < SPRITE_LAYER_COUNT; layer++) {
+    if (layer == SPRITE_LAYER_COUNT / 2) { draw_particles(); }
     list *sprites = sprite_layers[layer];
     list_each(sprites, (list_lambda)draw_sprite);
   }
@@ -119,7 +120,7 @@ static void draw_sprite(sprite *s) {
   }
 
   int sx = s->current_frame * s->frame_width; // section x coordinate
-  
+
   al_draw_tinted_scaled_rotated_bitmap_region(
       s->bitmap,                              // sprite bitmap
       sx, 0, s->frame_width, s->frame_height, // section
@@ -131,11 +132,11 @@ static void draw_sprite(sprite *s) {
       0                                       // horiz/vert flip
   );
 #ifndef NDEBUG
-  al_draw_textf(debug_font, al_map_rgb(255,0,0), s->position_ptr->x, 
+  al_draw_textf(debug_font, al_map_rgb(255,0,0), s->position_ptr->x,
       s->position_ptr->y, 0, "angle: %3.3f", *s->angle_ptr);
-  al_draw_textf(debug_font, al_map_rgb(0,0,255), s->position_ptr->x, 
+  al_draw_textf(debug_font, al_map_rgb(0,0,255), s->position_ptr->x,
       s->position_ptr->y + 30, 0, "pos: <%3d,%3d>", (int)s->position_ptr->x,
-      (int)s->position_ptr->y); 
+      (int)s->position_ptr->y);
 #endif
 }
 

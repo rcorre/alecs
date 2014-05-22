@@ -66,15 +66,14 @@ static bool main_update() {
   elapsed_time = delta;
   last_frame_time = cur_time;
   ecs_update_systems(delta);      // update every system
-  update_particles(delta);
+  update_particles(delta);        // update particles
   bool run = scene_update(delta); // run scene's update function
   return run;
 }
 
 static void main_draw() {
   al_clear_to_color(scene_bg_color);
-  draw_particles();
-  render_all_sprites(elapsed_time);
+  render_all_sprites(elapsed_time);   // also draws particles
   weapon_system_draw();
   scene_draw(); // the scene may draw something in addition to sprites (UI)
   al_flip_display();

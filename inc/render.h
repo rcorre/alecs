@@ -6,6 +6,7 @@
 **/
 
 #include "al_game.h"
+#include "particle_effects.h"
 #include "util/geometry.h"
 #include "util/list.h"
 
