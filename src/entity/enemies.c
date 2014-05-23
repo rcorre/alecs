@@ -3,7 +3,7 @@
 ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   ecs_entity *enemy = ecs_entity_new(pos);
   // sprite
-  ecs_attach_sprite(enemy, "hawk", -1);
+  ecs_attach_animation(enemy, "enemy1", 1, 64, 24, 6, ANIMATE_LOOP);
   // body
   Body *bod = &ecs_add_component(enemy, ECS_COMPONENT_BODY)->body;
   bod->max_linear_velocity = 200;
