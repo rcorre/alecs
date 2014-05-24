@@ -1,5 +1,7 @@
 #include "system/behavior_sys.h"
 
+// if distance to target is less than this, consider it reached
+const static double close_enough = 1;
 static double elapsed_time;
 
 static void move_toward(ecs_entity *ent, Propulsion *p, vector target) {
@@ -30,6 +32,14 @@ static void update_behavior(ecs_component *comp) {
   else if (b.type == BEHAVIOR_MOVE) {
     // displacement from current to desired location
     move_toward(ent, p, b.location);
+    if (vector_dist(ent->position, b.location) < close_enough) {
+      p->linear_throttle = ZEROVEC;
+      p->angular_throttle = 0;
+      Body *bod = &ent->components[ECS_COMPONENT_BODY]->body;
+      // TODO: this is cheating, behavior shouldn't directly modify velocity
+      bod->velocity = ZEROVEC;
+      b.type = BEHAVIOR_IDLE;
+    }
   }
 }
 

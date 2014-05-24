@@ -1,7 +1,7 @@
 #include "entity/enemies.h"
 
-ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
-  ecs_entity *enemy = ecs_entity_new(pos);
+ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
+  ecs_entity *enemy = ecs_entity_new((vector){SCREEN_W + 100, pos.y});
   // sprite
   ecs_attach_animation(enemy, "enemy1", 1, 64, 24, 6, ANIMATE_LOOP);
   // body
@@ -24,6 +24,8 @@ ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   // behavior
   Behavior *beh = &ecs_add_component(enemy, ECS_COMPONENT_BEHAVIOR)->behavior;
   beh->target = player;
+  beh->type = BEHAVIOR_MOVE;
+  beh->location = pos;
   enemy->team = TEAM_ENEMY;
   return enemy;
 }

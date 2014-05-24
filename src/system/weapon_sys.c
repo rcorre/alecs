@@ -91,6 +91,7 @@ static void fire_at_target(struct ecs_entity *target) {
   Behavior *behavior = &ecs_add_component(projectile,
       ECS_COMPONENT_BEHAVIOR)->behavior; 
   behavior->target = target;
+  behavior->type = BEHAVIOR_FOLLOW;
   Collider *collider = &ecs_add_component(projectile,
       ECS_COMPONENT_COLLIDER)->collider; 
   collider->rect = hitrect_from_sprite(projectile->sprite);

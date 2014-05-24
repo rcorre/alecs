@@ -24,7 +24,7 @@ static Weapon current_weapon = {
 static bool level_update(double time) {
   next_enemy_time -= time;
   if (next_enemy_time <= 0) {
-    spawn_enemy(rand_point((rectangle){0,0,SCREEN_W, SCREEN_H}), player_ship);
+    spawn_enemy((vector){300,100}, EAST, player_ship);
     next_enemy_time = enemy_time;
   }
   return run;

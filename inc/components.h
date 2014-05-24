@@ -26,6 +26,7 @@ typedef enum ecs_component_type {
 } ecs_component_type;
 
 typedef enum BehaviorType {
+  BEHAVIOR_IDLE,   ///< hover around a bit
   BEHAVIOR_FOLLOW, ///< move towards another entity
   BEHAVIOR_MOVE    ///< move towards a location
 } BehaviorType;
