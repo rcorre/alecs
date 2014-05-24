@@ -39,7 +39,7 @@ static void level_draw(void) {
 
 static void level_handle_mouse(ALLEGRO_MOUSE_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-    weapon_fire(player_ship);
+    weapon_fire_player(player_ship); // fire player's current weapon
   }
 }
 

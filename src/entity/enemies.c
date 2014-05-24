@@ -1,5 +1,15 @@
 #include "entity/enemies.h"
 
+static const double min_fire_time = 2;
+static const double max_fire_time = 5;
+
+static void fire_at_player(ecs_entity *enemy, void *player) {
+  weapon_fire_enemy(enemy, player);
+  // reset fire timer
+  Timer *timer = &enemy->components[ECS_COMPONENT_TIMER]->timer;
+  timer->time_left = randd(min_fire_time, max_fire_time);
+}
+
 ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   vector start;
   switch (enter_from) {
@@ -29,7 +39,7 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   col->rect = hitrect_from_sprite(enemy->sprite);
   col->keep_inside_level = true;
   // mouse listener
-  MouseListener *listener = 
+  MouseListener *listener =
     &ecs_add_component(enemy, ECS_COMPONENT_MOUSE_LISTENER)->mouse_listener;
   listener->click_rect = col->rect;
   listener->on_enter = weapon_set_target;
@@ -44,5 +54,11 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   beh->type = BEHAVIOR_MOVE;
   beh->location = pos;
   enemy->team = TEAM_ENEMY;
+  Timer *timer = &ecs_add_component(enemy, ECS_COMPONENT_TIMER)->timer;
+  timer->time_left = randd(min_fire_time, max_fire_time);
+  timer->timer_delegate = (ecs_entity_delegate) {
+    .delegate = fire_at_player,
+    .data = player
+  };
   return enemy;
 }

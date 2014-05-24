@@ -19,6 +19,7 @@ typedef enum ecs_component_type {
   ECS_COMPONENT_COLLIDER,
   ECS_COMPONENT_PROPULSION,
   ECS_COMPONENT_HEALTH,
+  ECS_COMPONENT_TIMER,
   ECS_COMPONENT_BEHAVIOR,
   ECS_COMPONENT_KEYBOARD_LISTENER,
   ECS_COMPONENT_MOUSE_LISTENER,
@@ -108,7 +109,7 @@ typedef struct Timer {
   /** maximum health point count */
   double time_left;
   /** action to perform on owner entity when \ref time_left == 0 */
-  ecs_entity_trigger timer_trigger;
+  ecs_entity_delegate timer_delegate;
 } Timer;
 
 /** comonent that causes an entity to act autonomously */

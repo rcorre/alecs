@@ -31,8 +31,11 @@ void weapon_set_target(struct ecs_entity *target);
 /** clear lockon for entity if entity is the currently locked target */
 void weapon_clear_target(struct ecs_entity *target);
 
-/** fire the current weapon */
-void weapon_fire(struct ecs_entity *launcher);
+/** fire the player's current weapon */
+void weapon_fire_player(struct ecs_entity *player);
+
+/** fire an enemy's weapon. player is type void* for use as a delegate arg */
+void weapon_fire_enemy(struct ecs_entity *enemy, void *player);
 
 /** switch between primary and secondary weapon */
 void weapon_swap();

@@ -17,6 +17,7 @@
 #include "system/mouse_sys.h"
 #include "system/weapon_sys.h"
 #include "system/behavior_sys.h"
+#include "system/timer_sys.h"
 
 /* struct declarations ********************************************************/
 
