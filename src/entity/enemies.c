@@ -21,7 +21,6 @@ ecs_entity* spawn_enemy(vector pos, ecs_entity *player) {
   Propulsion *pro = &ecs_add_component(enemy, ECS_COMPONENT_PROPULSION)->propulsion;
   pro->linear_accel = 100;
   pro->turn_rate = 2*PI;
-  pro->directed = true;
   // behavior
   Behavior *beh = &ecs_add_component(enemy, ECS_COMPONENT_BEHAVIOR)->behavior;
   beh->target = player;

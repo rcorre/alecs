@@ -25,6 +25,11 @@ typedef enum ecs_component_type {
   NUM_COMPONENT_TYPES
 } ecs_component_type;
 
+typedef enum BehaviorType {
+  BEHAVIOR_FOLLOW, ///< move towards another entity
+  BEHAVIOR_MOVE    ///< move towards a location
+} BehaviorType;
+
 /** forward declaration of \ref ecs_entity, defined in \ref ecs.h */
 struct ecs_entity;
 /** function pointer attached to a \ref ecs_component.
@@ -107,7 +112,9 @@ typedef struct Timer {
 
 /** comonent that causes an entity to act autonomously */
 typedef struct Behavior {
+  BehaviorType type;
   struct ecs_entity *target;  ///< target of interest
+  vector location; ///< location of interest
 } Behavior;
 
 typedef struct KeyboardListener {
