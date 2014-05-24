@@ -24,7 +24,7 @@ static Weapon current_weapon = {
 static bool level_update(double time) {
   next_enemy_time -= time;
   if (next_enemy_time <= 0) {
-    spawn_enemy((vector){300,100}, EAST, player_ship);
+    //spawn_enemy((vector){300,100}, EAST, player_ship);
     next_enemy_time = enemy_time;
   }
   return run;
@@ -59,6 +59,11 @@ scene level_new(void) {
   scenery_add_background("sunset", -SPRITE_LAYER_LIMIT, 0, 0);
   scenery_add_background("mountains2", -SPRITE_LAYER_LIMIT + 1, 15, 0);
   scenery_add_background("mountains1", -SPRITE_LAYER_LIMIT + 2, 30, 0);
+  //TODO: automate
+  spawn_enemy((vector){300,100}, WEST, player_ship);
+  spawn_enemy((vector){600,100}, NORTH, player_ship);
+  spawn_enemy((vector){900,100}, EAST, player_ship);
+  spawn_enemy((vector){600,600}, SOUTH, player_ship);
   return (scene){
     .update = level_update,
     .draw = level_draw,

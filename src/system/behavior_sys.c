@@ -1,7 +1,7 @@
 #include "system/behavior_sys.h"
 
 // if distance to target is less than this, consider it reached
-const static double close_enough = 1;
+const static double close_enough = 5;
 static double elapsed_time;
 
 static void move_toward(ecs_entity *ent, Propulsion *p, vector target) {

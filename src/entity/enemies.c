@@ -1,7 +1,24 @@
 #include "entity/enemies.h"
 
 ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
-  ecs_entity *enemy = ecs_entity_new((vector){SCREEN_W + 100, pos.y});
+  vector start;
+  switch (enter_from) {
+    case EAST:
+      start = (vector){SCREEN_W + 100, pos.y};
+      break;
+    case WEST:
+      start = (vector){-100, pos.y};
+      break;
+    case NORTH:
+      start = (vector){pos.x, -100};
+      break;
+    case SOUTH:
+      start = (vector){pos.x, SCREEN_H + 100};
+      break;
+    default:
+      start = pos;
+  }
+  ecs_entity *enemy = ecs_entity_new((vector)start);
   // sprite
   ecs_attach_animation(enemy, "enemy1", 1, 64, 24, 6, ANIMATE_LOOP);
   // body

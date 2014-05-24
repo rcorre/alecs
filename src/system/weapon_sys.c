@@ -102,9 +102,9 @@ static void fire_at_target(struct ecs_entity *target) {
 }
 
 static void draw_lockon(struct ecs_entity *target) {
-    al_draw_arc(target->position.x, target->position.y,
-        indicator_radius, 0, 2 * PI, PRIMARY_LOCK_COLOR,
-        indicator_thickness);
+  al_draw_arc(target->position.x, target->position.y,
+      indicator_radius, 0, 2 * PI, PRIMARY_LOCK_COLOR,
+      indicator_thickness);
 }
 
 static void explode(struct ecs_entity *projectile, void *weapon_data) {
