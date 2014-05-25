@@ -60,8 +60,7 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   Timer *timer = &ecs_add_component(enemy, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = randd(min_fire_time, max_fire_time);
   timer->timer_action = fire_at_player;
-  Health *health = &ecs_add_component(enemy, ECS_COMPONENT_HEALTH)->health;
-  health->hp = 10;
-  health->on_disable = ecs_entity_free;
+  ecs_component *health_comp = ecs_add_component(enemy, ECS_COMPONENT_HEALTH);
+  health_comp->health = make_health(30, ecs_entity_free, "smoke");
   return enemy;
 }

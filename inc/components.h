@@ -43,7 +43,7 @@ typedef void (*ecs_mouse_handler)(struct ecs_entity *ent, bool lmb, bool rmb);
  *  \param ent pointer to the entity that holds the keyboard handler
  *  \param keycode code of pressed key
  *  \param down true if key was pressed, false if released */
-typedef void (*ecs_keyboard_handler)(struct ecs_entity *entity, int keycode, 
+typedef void (*ecs_keyboard_handler)(struct ecs_entity *entity, int keycode,
     bool down);
 
 /** component giving physical properties to an \ref ecs_entity */
@@ -89,10 +89,14 @@ typedef struct Propulsion {
 
 /** comonent indicating that an \ref ecs_entity can take damage */
 typedef struct Health {
+  /** maximum health */
+  double max_hp;
   /** health points remaining - initialized to \ref max_hp */
   double hp;
   /** delegate to run when health hits or passes 0 */
   ecs_entity_trigger on_disable;
+  /** particle effect to run when damaged */
+  particle_generator particle_effect;
 } Health;
 
 /** comonent that triggers a change in an \ref ecs_entity after some time */
