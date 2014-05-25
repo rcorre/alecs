@@ -37,16 +37,6 @@ struct ecs_entity;
 /** function pointer attached to a \ref ecs_component.
  *  when called, it is passed the owner entity*/
 typedef void (*ecs_entity_trigger)(struct ecs_entity *ent);
-/** function pointer attached to a \ref ecs_component.
- *  when called, it is passed the owner entity and some other data */
-typedef void (*ecs_delegate_fn)(struct ecs_entity *ent, void *data);
-/** can be attached to various components to set up a future action.
- *  upon triggering, the delegate function is passed a pointer to the owner
- *  entity as well as the additional data included in the struct */
-typedef struct ecs_entity_delegate {
-  ecs_delegate_fn delegate;
-  void *data;
-} ecs_entity_delegate;
 
 typedef void (*ecs_mouse_handler)(struct ecs_entity *ent, bool lmb, bool rmb);
 /** action to be taken on keypress
@@ -75,8 +65,9 @@ typedef struct Collider {
   rectangle rect;
   /** if true, owner will bounce when colliding with level bounds */
   bool keep_inside_level;
-  /** action to take when a collision is detected */
-  ecs_entity_delegate on_collision;
+  /** action to take when a collision is detected. both entities involved in
+   * the collision are passed as arguments */
+  void (*on_collision)(struct ecs_entity *ent1, struct ecs_entity *ent2);
 } Collider;
 
 /** component allowing an \ref ecs_entity to move */
@@ -98,10 +89,10 @@ typedef struct Propulsion {
 
 /** comonent indicating that an \ref ecs_entity can take damage */
 typedef struct Health {
-  /** maximum health point count */
-  double max_hp;
   /** health points remaining - initialized to \ref max_hp */
   double hp;
+  /** delegate to run when health hits or passes 0 */
+  ecs_entity_trigger on_disable;
 } Health;
 
 /** comonent that triggers a change in an \ref ecs_entity after some time */
@@ -109,7 +100,7 @@ typedef struct Timer {
   /** maximum health point count */
   double time_left;
   /** action to perform on owner entity when \ref time_left == 0 */
-  ecs_entity_delegate timer_delegate;
+  ecs_entity_trigger timer_action;
 } Timer;
 
 /** comonent that causes an entity to act autonomously */

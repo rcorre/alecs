@@ -74,11 +74,11 @@ static void try_entity_collision(ecs_entity *e1, Collider *c1, ecs_entity *e2,
 {
   if (rect_intersect(c1->rect, c2->rect)) {
     // run collision handlers if they exist
-    if (c1->on_collision.delegate) {
-      c1->on_collision.delegate(e1, c1->on_collision.data);
+    if (c1->on_collision) {
+      c1->on_collision(e1, e2);
     }
-    if (c2->on_collision.delegate) {
-      c2->on_collision.delegate(e2, c2->on_collision.data);
+    if (c2->on_collision) {
+      c2->on_collision(e2, e1);
     }
   }
 }

@@ -1,9 +1,12 @@
 #include "entity/enemies.h"
 
-static const double min_fire_time = 2;
-static const double max_fire_time = 5;
+static const double min_fire_time = 5;
+static const double max_fire_time = 9;
 
-static void fire_at_player(ecs_entity *enemy, void *player) {
+static void fire_at_player(ecs_entity *enemy) {
+  ecs_component *behavior_comp = enemy->components[ECS_COMPONENT_BEHAVIOR];
+  assert(behavior_comp);
+  ecs_entity *player = behavior_comp->behavior.target;
   weapon_fire_enemy(enemy, player);
   // reset fire timer
   Timer *timer = &enemy->components[ECS_COMPONENT_TIMER]->timer;
@@ -56,9 +59,9 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   enemy->team = TEAM_ENEMY;
   Timer *timer = &ecs_add_component(enemy, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = randd(min_fire_time, max_fire_time);
-  timer->timer_delegate = (ecs_entity_delegate) {
-    .delegate = fire_at_player,
-    .data = player
-  };
+  timer->timer_action = fire_at_player;
+  Health *health = &ecs_add_component(enemy, ECS_COMPONENT_HEALTH)->health;
+  health->hp = 10;
+  health->on_disable = ecs_entity_free;
   return enemy;
 }

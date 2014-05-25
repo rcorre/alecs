@@ -7,7 +7,7 @@ static void update_timer(ecs_component *timer_comp) {
   ecs_entity *ent = timer_comp->owner_entity;
   timer->time_left -= elapsed_time;
   if (timer->time_left < 0) {
-    timer->timer_delegate.delegate(ent, timer->timer_delegate.data);
+    timer->timer_action(ent);
   }
 }
 

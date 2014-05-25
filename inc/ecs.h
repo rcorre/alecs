@@ -55,7 +55,6 @@ typedef enum ecs_entity_team {
   TEAM_ENEMY    = 0x2
 } ecs_entity_team;
 
-
 /** a game object composed of \ref ecs_components */
 typedef struct ecs_entity {
   /** absolute location of entity's center */
