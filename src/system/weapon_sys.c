@@ -18,7 +18,10 @@ static Weapon *current_weapon, *alternate_weapon;
 static void fire_at_target(struct ecs_entity *fired_by,
     struct ecs_entity *target, ecs_entity_team team);
 static void draw_lockon(struct ecs_entity *target);
-static void explode(struct ecs_entity *projectile, struct ecs_entity *target);
+// collision handler for projectile 
+static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target);
+// blow up a projectile
+static void explode(struct ecs_entity *projectile);
 
 void weapon_system_fn(double time) {
   if (current_target) {
@@ -106,8 +109,11 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   Collider *collider = &ecs_add_component(projectile,
       ECS_COMPONENT_COLLIDER)->collider;
   collider->rect = hitrect_from_sprite(projectile->sprite);
-  collider->on_collision = explode;
+  collider->on_collision = hit_target;
   projectile->team = team;
+  Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
+  timer->time_left = 6.0;
+  timer->timer_action = explode;
 }
 
 static void draw_lockon(struct ecs_entity *target) {
@@ -116,11 +122,15 @@ static void draw_lockon(struct ecs_entity *target) {
       indicator_thickness);
 }
 
-static void explode(struct ecs_entity *projectile, struct ecs_entity *target) {
+static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target) 
+{
+  deal_damage(target, 10);
+}
+
+static void explode(struct ecs_entity *projectile) {
   ecs_entity *boom = ecs_entity_new(projectile->position);
   sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
       explosion_animate_rate, ANIMATE_ONCE);
   anim->scale = (vector){3,3};
   ecs_entity_free(projectile);
-  deal_damage(target, 10);
 }
