@@ -14,7 +14,7 @@ void health_system_fn(double time) {
   list_each(components, (list_lambda)update_health);
 }
 
-void deal_damage(ecs_entity *entity, double amount) {
+void deal_damage(struct ecs_entity *entity, double amount) {
   ecs_component *comp = entity->components[ECS_COMPONENT_HEALTH];
   if (comp) {  // make sure entity has a health component
     Health *health = &comp->health;

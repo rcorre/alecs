@@ -18,6 +18,7 @@
 #include "system/weapon_sys.h"
 #include "system/behavior_sys.h"
 #include "system/timer_sys.h"
+#include "system/health_sys.h"
 
 /* struct declarations ********************************************************/
 
