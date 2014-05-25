@@ -4,7 +4,7 @@ static double elapsed_time;
 
 static void update_health(ecs_component *health_comp) {
   Health *health = &health_comp->health;
-  if (health->hp <= 0) { // invoke disable delegate
+  if (health->hp <= 0 && health->on_disable) { // invoke disable delegate
     health->on_disable(health_comp->owner_entity);
     // set delegate to null so it is only called once
     health->on_disable = NULL;

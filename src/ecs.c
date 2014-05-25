@@ -39,10 +39,10 @@ void ecs_entity_free(ecs_entity *entity) {
 
 ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
   assert(entity != NULL);
+  ecs_remove_component(entity, type); // remove previous component if it had one
   ecs_component *comp = calloc(1, sizeof(ecs_component));
   comp->type = type;           // tag entity type
   comp->owner_entity = entity; // point component back to owner
-  assert(entity->components[(int)type] == NULL);
   // place component in entity's component slot for that type
   entity->components[(int)type] = comp;
   // place component in global store, give it a pointer to its node

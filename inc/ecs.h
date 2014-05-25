@@ -105,7 +105,8 @@ ecs_entity *ecs_entity_new(vector position);
 **/
 void ecs_entity_free(ecs_entity *entity);
 
-/** attach a new component to an entity
+/** attach a new component to an entity. If \ref entity already has a component
+  * of this type, it will be freed and replaced
   * \param entity \ref ecs_entity to which the component will be attached
   * \param type type of component to attach
   * \return an \b UNINITIALIZED component.  The general component fields (\ref
