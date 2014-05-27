@@ -14,10 +14,7 @@ static void fire_at_player(ecs_entity *enemy) {
 }
 
 static void asplode_enemy(ecs_entity *enemy) {
-  ecs_entity *boom = ecs_entity_new(enemy->position);
-  sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
-      15, ANIMATE_ONCE);
-  anim->scale = (vector){6,4};
+  scenery_make_explosion(enemy->position, (vector){6,4}, 40, al_map_rgb(255,160,160));
   ecs_entity_free(enemy);
 }
 

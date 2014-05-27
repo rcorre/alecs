@@ -18,4 +18,13 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec);
 void scenery_add_background(const char *name, int depth, double speed, int
     offset);
 
+/** create an explosion
+  * \param pos center position of explosion
+  * \param size x and y scale of explosion
+  * \param anim_rate rate of animation for explosion
+  * \param tint shade of explosion
+**/
+void scenery_make_explosion(vector pos, vector size, double anim_rate,
+    ALLEGRO_COLOR tint);
+
 #endif /* end of include guard: SCENERY_H */

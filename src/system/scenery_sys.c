@@ -58,3 +58,13 @@ static void make_cloud() {
   make_constant_vel_body(body, (vector){speed, 0});
   body->destroy_on_exit = WEST;
 }
+
+void scenery_make_explosion(vector pos, vector size, double anim_rate,
+    ALLEGRO_COLOR tint) 
+{
+  ecs_entity *boom = ecs_entity_new(pos);
+  sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
+      anim_rate, ANIMATE_ONCE);
+  anim->scale = size;
+  anim->tint = tint;
+}

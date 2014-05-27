@@ -1,5 +1,6 @@
 #include "system/weapon_sys.h"
 #include "system/health_sys.h"
+#include "system/scenery_sys.h"
 
 // lockon constants
 static const float indicator_radius = 18;
@@ -8,7 +9,7 @@ static const float indicator_thickness = 5;
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
 
 // explosion constants
-static const double explosion_animate_rate = 25; // frames/sec
+static const double explosion_animate_rate = 50; // frames/sec
 
 static struct ecs_entity *current_target;
 static double current_lockon_time;
@@ -129,9 +130,7 @@ static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
 }
 
 static void explode(struct ecs_entity *projectile) {
-  ecs_entity *boom = ecs_entity_new(projectile->position);
-  sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
-      explosion_animate_rate, ANIMATE_ONCE);
-  anim->scale = (vector){3,3};
+  scenery_make_explosion(projectile->position, (vector){3,3},
+      explosion_animate_rate, al_map_rgb(255,255,255)); 
   ecs_entity_free(projectile);
 }
