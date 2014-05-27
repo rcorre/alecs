@@ -13,9 +13,9 @@ void ecs_init() {
     ecs_component_store[i] = list_new();
   }
   list_push(ecs_systems, scenery_system_fn);
+  list_push(ecs_systems, collision_system_fn);
   list_push(ecs_systems, body_system_fn);
   list_push(ecs_systems, propulsion_system_fn);
-  list_push(ecs_systems, collision_system_fn);
   list_push(ecs_systems, weapon_system_fn);
   list_push(ecs_systems, behavior_system_fn);
   list_push(ecs_systems, timer_system_fn);

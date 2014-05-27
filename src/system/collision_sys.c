@@ -130,25 +130,25 @@ static void elastic_collision(Body *bod1, Body *bod2) {
 static double roll_back_collision(ecs_entity *e1, Body *b1, Collider *c1,
     ecs_entity *e2, Body *b2, Collider *c2, double elapsed_time)
 {
+  double time_left = 0; // accumulate time "regained" by rollback
   vector v1 = b1->velocity;
   vector v2 = b2->velocity;
-  double r1x = c1->rect.x - v1.x * elapsed_time;
-  double r1y = c1->rect.y - v1.y * elapsed_time;
-  double r2x = c2->rect.x - v2.x * elapsed_time;
-  double r2y = c2->rect.y - v2.y * elapsed_time;
+  double r1x = c1->rect.x;
+  double r1y = c1->rect.y;
+  double r2x = c2->rect.x;
+  double r2y = c2->rect.y;
   double step = elapsed_time / rollback_granularity;
-  rectangle rect1 = {.x = r1x, .y = r1y, .w = c1->rect.w, .h = c1->rect.h};
-  rectangle rect2 = {.x = r2x, .y = r2y, .w = c2->rect.w, .h = c2->rect.h};
-  while (!rect_intersect(rect1, rect2) && elapsed_time > 0) {
-    elapsed_time -= step;
-    r1x += v1.x * step;
-    r1y += v1.y * step;
-    r2x += v2.x * step;
-    r2y += v2.y * step;
-    rect1.x = r1x;
-    rect1.y = r1y;
-    rect2.x = r1x;
-    rect2.y = r1y;
+  while (rect_intersect(c1->rect, c2->rect)) {
+    // TODO: may loop infinitely
+    time_left += step;
+    r1x -= v1.x * step;
+    r1y -= v1.y * step;
+    r2x -= v2.x * step;
+    r2y -= v2.y * step;
+    c1->rect.x = r1x;
+    c1->rect.y = r1y;
+    c2->rect.x = r2x;
+    c2->rect.y = r2y;
   }
   e1->position = (vector){r1x + c1->rect.w / 2, r1y + c1->rect.h / 2};
   e2->position = (vector){r2x + c2->rect.w / 2, r2y + c2->rect.h / 2};
