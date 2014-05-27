@@ -94,8 +94,17 @@ static void try_entity_collision(ecs_entity *e1, Collider *c1, ecs_entity *e2,
       elastic_collision(bod1, bod2);
       e1->position = vector_add(e1->position, vector_scale(bod1->velocity, t_left));
       e2->position = vector_add(e2->position, vector_scale(bod2->velocity, t_left));
-      // run collision handlers if they exist
+      // play particle effects if they exist
+      if (c1->collide_particle_effect.data != NULL) {
+        c1->collide_particle_effect.position = e1->position;
+        spawn_particles(&c1->collide_particle_effect, time, 1, ZEROVEC);
+      }
+      if (c2->collide_particle_effect.data != NULL) {
+        c2->collide_particle_effect.position = e2->position;
+        spawn_particles(&c2->collide_particle_effect, time, 1, ZEROVEC);
+      }
     }
+      // run collision handlers if they exist
     if (c1->on_collision) {
       c1->on_collision(e1, e2);
     }

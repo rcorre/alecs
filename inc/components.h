@@ -70,6 +70,8 @@ typedef struct Collider {
   /** action to take when a collision is detected. both entities involved in
    * the collision are passed as arguments */
   void (*on_collision)(struct ecs_entity *ent1, struct ecs_entity *ent2);
+  /** particle effect to play on collision */
+  particle_generator collide_particle_effect;
 } Collider;
 
 /** component allowing an \ref ecs_entity to move */

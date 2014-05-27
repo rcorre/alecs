@@ -22,6 +22,7 @@ ecs_entity* make_player_ship() {
   col->rect = hitrect_from_sprite(player->sprite);
   col->keep_inside_level = true;
   col->elastic_collision = true;
+  col->collide_particle_effect = get_particle_generator("sparks");
   player->team = TEAM_FRIENDLY;
   return player;
 }
