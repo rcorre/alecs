@@ -125,6 +125,7 @@ static void draw_lockon(struct ecs_entity *target) {
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target) 
 {
   deal_damage(target, 10);
+  explode(projectile);
 }
 
 static void explode(struct ecs_entity *projectile) {

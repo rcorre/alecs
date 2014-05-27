@@ -84,16 +84,18 @@ static void try_entity_collision(ecs_entity *e1, Collider *c1, ecs_entity *e2,
     Collider *c2, double time)
 {
   if (rect_intersect(c1->rect, c2->rect)) {
-    ecs_component *body_comp1 = e1->components[ECS_COMPONENT_BODY];
-    ecs_component *body_comp2 = e2->components[ECS_COMPONENT_BODY];
-    assert(body_comp1 && body_comp2);
-    Body *bod1 = &body_comp1->body;
-    Body *bod2 = &body_comp2->body;
-    double t_left = roll_back_collision(e1, bod1, c1, e2, bod2, c2, time);
-    elastic_collision(bod1, bod2);
-    e1->position = vector_add(e1->position, vector_scale(bod1->velocity, t_left));
-    e2->position = vector_add(e2->position, vector_scale(bod2->velocity, t_left));
-    // run collision handlers if they exist
+    if (c1->elastic_collision && c2->elastic_collision) {
+      ecs_component *body_comp1 = e1->components[ECS_COMPONENT_BODY];
+      ecs_component *body_comp2 = e2->components[ECS_COMPONENT_BODY];
+      assert(body_comp1 && body_comp2);
+      Body *bod1 = &body_comp1->body;
+      Body *bod2 = &body_comp2->body;
+      double t_left = roll_back_collision(e1, bod1, c1, e2, bod2, c2, time);
+      elastic_collision(bod1, bod2);
+      e1->position = vector_add(e1->position, vector_scale(bod1->velocity, t_left));
+      e2->position = vector_add(e2->position, vector_scale(bod2->velocity, t_left));
+      // run collision handlers if they exist
+    }
     if (c1->on_collision) {
       c1->on_collision(e1, e2);
     }

@@ -60,6 +60,7 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   Collider *col = &ecs_add_component(enemy, ECS_COMPONENT_COLLIDER)->collider;
   col->rect = hitrect_from_sprite(enemy->sprite);
   col->keep_inside_level = true;
+  col->elastic_collision = true;
   // mouse listener
   MouseListener *listener =
     &ecs_add_component(enemy, ECS_COMPONENT_MOUSE_LISTENER)->mouse_listener;

@@ -65,6 +65,8 @@ typedef struct Collider {
   rectangle rect;
   /** if true, owner will bounce when colliding with level bounds */
   bool keep_inside_level;
+  /** if true, perform elastic collisions with other entities*/
+  bool elastic_collision;
   /** action to take when a collision is detected. both entities involved in
    * the collision are passed as arguments */
   void (*on_collision)(struct ecs_entity *ent1, struct ecs_entity *ent2);
