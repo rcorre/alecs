@@ -3,7 +3,7 @@
 static void kbd_handler(ecs_entity *e, int keycode, bool down);
 
 ecs_entity* make_player_ship() {
-  ecs_entity *player = ecs_entity_new((vector){.x = 50, .y = 50});
+  ecs_entity *player = ecs_entity_new((vector){.x = 50, .y = 400});
   ecs_attach_animation(player, "viper", 2, 64, 64, 8, ANIMATE_LOOP);
   // keyboard input listener component
   ecs_component *k = ecs_add_component(player, ECS_COMPONENT_KEYBOARD_LISTENER);
