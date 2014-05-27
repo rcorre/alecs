@@ -90,8 +90,9 @@ void weapon_swap() {
 static void fire_at_target(struct ecs_entity *firing_entity,
     struct ecs_entity *target, ecs_entity_team team)
 {
+  vector fire_pos = vector_add(firing_entity->position, current_weapon->offset);
   struct ecs_entity *projectile = ecs_entity_new(firing_entity->position);
-  projectile->position = firing_entity->position;
+  projectile->position = fire_pos;
   projectile->angle = -PI / 2;
   ecs_attach_sprite(projectile, "seeker", 0);
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
@@ -115,6 +116,9 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = 6.0;
   timer->timer_action = explode;
+  // make small explosion for launch
+  scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1));
+  al_game_play_sound("launch");
 }
 
 static void draw_lockon(struct ecs_entity *target) {

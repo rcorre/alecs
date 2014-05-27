@@ -6,6 +6,7 @@
 typedef struct Weapon {
   const char *name;
   const char *particle_effect;
+  vector offset;
   int max_lockons;
   double lockon_time;
   double initial_speed;

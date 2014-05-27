@@ -13,6 +13,7 @@ static Weapon current_weapon = {
   .particle_effect = "seeker-rocket",
   .max_lockons = 5,
   .lockon_time = 0.5,
+  .offset = {0, 10},
   .initial_speed = 100,
   .max_speed = 300,
   .acceleration = 1200,
