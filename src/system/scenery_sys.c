@@ -36,7 +36,7 @@ void scenery_add_background(const char *name, int depth, double speed, int
     offset) 
 { 
   ecs_entity *bg = ecs_entity_new((vector){SCREEN_W / 2 + offset, SCREEN_H / 2});
-  sprite* s = ecs_attach_sprite(bg, name, depth);
+  ecs_attach_sprite(bg, name, depth);
   Body *body = &ecs_add_component(bg, ECS_COMPONENT_BODY)->body;
   make_constant_vel_body(body, (vector){-speed, 0});
 }
@@ -67,4 +67,5 @@ void scenery_make_explosion(vector pos, vector size, double anim_rate,
       anim_rate, ANIMATE_ONCE);
   anim->scale = size;
   anim->tint = tint;
+  al_game_play_sound("explosion1");
 }

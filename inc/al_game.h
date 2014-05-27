@@ -55,4 +55,15 @@ ALLEGRO_BITMAP* al_game_get_bitmap(const char *name);
 **/
 ALLEGRO_FONT* al_game_get_font(const char *name);
 
+/** get a pointer to a preloaded sound resource
+  * \param name source sound filename without extension
+  * \return a pointer to the sound preloaded from the sound font file
+**/
+ALLEGRO_SAMPLE* al_game_get_sound(const char *name);
+
+/** play a sound directly by its name.
+  * \param name source sound filename without extension
+**/
+void al_game_play_sound(const char *name);
+
 #endif /* end of include guard: AL_GAME_H */

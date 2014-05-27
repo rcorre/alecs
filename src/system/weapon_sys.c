@@ -19,7 +19,7 @@ static Weapon *current_weapon, *alternate_weapon;
 static void fire_at_target(struct ecs_entity *fired_by,
     struct ecs_entity *target, ecs_entity_team team);
 static void draw_lockon(struct ecs_entity *target);
-// collision handler for projectile 
+// collision handler for projectile
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target);
 // blow up a projectile
 static void explode(struct ecs_entity *projectile);
@@ -123,7 +123,7 @@ static void draw_lockon(struct ecs_entity *target) {
       indicator_thickness);
 }
 
-static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target) 
+static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
 {
   deal_damage(target, 10);
   explode(projectile);
@@ -131,6 +131,6 @@ static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
 
 static void explode(struct ecs_entity *projectile) {
   scenery_make_explosion(projectile->position, (vector){3,3},
-      explosion_animate_rate, al_map_rgb(255,255,255)); 
+      explosion_animate_rate, al_map_rgb(255,255,255));
   ecs_entity_free(projectile);
 }

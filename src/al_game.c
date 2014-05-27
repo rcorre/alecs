@@ -5,7 +5,7 @@ ALLEGRO_EVENT_QUEUE *event_queue;
 ALLEGRO_TIMER *frame_timer;
 
 // store preloaded resources accessible by name
-static stringmap *bitmap_resources, *font_resources;
+static stringmap *bitmap_resources, *font_resources, *sound_resources;
 
 // function to load a resource from a file
 typedef void *(*resource_load_fn)(const char *filename);
@@ -13,6 +13,8 @@ static stringmap* load_resource_dir(const char *path, resource_load_fn loader,
     list_lambda resource_free_fn);
 static void* bitmap_from_file(const char *filename);
 static void* font_from_file(const char *filename);
+static void* sound_from_file(const char *filename);
+static int count_dir_entries(const char *path);
 
 int al_game_init() {
   srand((unsigned)time(NULL));
@@ -44,7 +46,8 @@ int al_game_init() {
     fprintf(stderr, "failed to init acodec addon\n");
     return -1;
   }
-  if (!al_reserve_samples(1)) { //reserve space for a single audio sample
+  // reserve one sound sample for each entry in the sound resource file
+  if (!al_reserve_samples(count_dir_entries(SOUND_DIR))) { 
     fprintf(stderr, "failed to init acodec addon\n");
     return -1;
   }
@@ -70,6 +73,8 @@ int al_game_init() {
       (list_lambda)al_destroy_font);
   bitmap_resources = load_resource_dir(BITMAP_DIR, bitmap_from_file,
       (list_lambda)al_destroy_bitmap);
+  sound_resources = load_resource_dir(SOUND_DIR, sound_from_file,
+      (list_lambda)al_destroy_sample);
 
   // event source setup
   al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -124,8 +129,16 @@ ALLEGRO_FONT* al_game_get_font(const char *name) {
   abort();
 }
 
+ALLEGRO_SAMPLE* al_game_get_sound(const char *name) {
+  ALLEGRO_SAMPLE *sound = stringmap_find(sound_resources, name);
+  if (sound) { return sound; }
+  fprintf(stderr, "could not find sound resource named '%s'\n", name);
+  abort();
+}
+
 static stringmap* load_resource_dir(const char *path, resource_load_fn loader,
-    list_lambda resource_free_fn) {
+    list_lambda resource_free_fn) 
+{
   ALLEGRO_FS_ENTRY *resource_dir = al_create_fs_entry(path);
   // open the directory to read all entries
   if (!al_open_directory(resource_dir)) {
@@ -150,10 +163,32 @@ static stringmap* load_resource_dir(const char *path, resource_load_fn loader,
   return res_map;
 }
 
+static int count_dir_entries(const char *path) {
+  ALLEGRO_FS_ENTRY *dir_entry = al_create_fs_entry(path);
+  // open the directory to read all entries
+  if (!al_open_directory(dir_entry)) {
+    fprintf(stderr, "count_dir_entries failed to open directory %s\n", path);
+    abort();
+  }
+  int count = 0;
+  // count the entries
+  while (al_read_directory(dir_entry)) { ++count; }
+  return count;
+}
+
 static void* bitmap_from_file(const char *filename) {
   return al_load_bitmap(filename);
 }
 
 static void* font_from_file(const char *filename) {
   return al_load_ttf_font(filename, 12, 0);
+}
+
+static void* sound_from_file(const char *filename) {
+  return al_load_sample(filename);
+}
+
+void al_game_play_sound(const char *name) {
+  ALLEGRO_SAMPLE *sound = al_game_get_sound(name);
+  al_play_sample(sound, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 }
