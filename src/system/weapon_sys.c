@@ -154,3 +154,37 @@ static void friendly_fire_timer_fn(struct ecs_entity *projectile) {
   t->time_left = 5.0;  // TODO: use projectile duration time
   t->timer_action = explode;
 }
+
+void launch_flare(vector pos) {
+  struct ecs_entity *flare = ecs_entity_new(pos);
+  flare->angle = -PI / 2;
+  /*
+  sprite *s = ecs_attach_sprite(flare, "explosion", 3);
+  s->frame_width = 64;
+  s->frame_height = 64;
+  s->scale = (vector){0.5, 0.5};
+  s->tint = al_map_rgb_f(1,0,0);
+  s->
+  */
+  Body *b = &ecs_add_component(flare, ECS_COMPONENT_BODY)->body;
+  b->max_linear_velocity = 600;
+  b->velocity = (vector){-50, -500};
+  b->destroy_on_exit = NONE;
+  Propulsion *p =
+    &ecs_add_component(flare, ECS_COMPONENT_PROPULSION)->propulsion;
+  p->linear_accel = 400;
+  p->linear_throttle = (vector){-1, 0};
+  p->turn_rate = 0;
+  p->particle_effect =
+    get_particle_generator("flare");
+  p->directed = true;
+  /*
+  Collider *collider = &ecs_add_component(projectile,
+      ECS_COMPONENT_COLLIDER)->collider;
+  collider->rect = hitrect_from_sprite(projectile->sprite);
+  collider->on_collision = hit_target;
+  projectile->team = team;
+  */
+  // make small explosion for launch
+  scenery_make_explosion(pos, (vector){1,2}, 50, al_map_rgb_f(1,0,0), "launch");
+}

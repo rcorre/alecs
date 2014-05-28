@@ -70,6 +70,9 @@ static void level_handle_keyboard(ALLEGRO_KEYBOARD_EVENT ev) {
   if (ev.keycode == ALLEGRO_KEY_ESCAPE) {
     run = false;
   }
+  if (ev.keycode == ALLEGRO_KEY_SPACE) {
+    launch_flare(player_ship->position);
+  }
 }
 
 static void level_shutdown() {

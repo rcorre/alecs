@@ -41,4 +41,7 @@ void weapon_fire_enemy(struct ecs_entity *enemy, void *player);
 /** switch between primary and secondary weapon */
 void weapon_swap();
 
+/** switch between primary and secondary weapon */
+void launch_flare(vector pos);
+
 #endif /* end of include guard: WEAPON_SYS_H */
