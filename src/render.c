@@ -151,11 +151,11 @@ static list* get_sprite_layer(int layernum) {
 }
 
 int sprite_width(sprite *s) {
-  return s->frame_height * s->scale.x;
+  return s->frame_width * s->scale.x;
 }
 
 int sprite_height(sprite *s) {
-  return s->frame_width * s->scale.y;
+  return s->frame_height * s->scale.y;
 }
 
 int sprite_num_frames(sprite *s) {
