@@ -5,6 +5,8 @@
 // lockon constants
 static const float indicator_radius = 18;
 static const float indicator_thickness = 5;
+// time after which projectiles become neutrally aligned
+static const double friendly_fire_time = 1;
 #define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 200)
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
 
@@ -23,6 +25,8 @@ static void draw_lockon(struct ecs_entity *target);
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target);
 // blow up a projectile
 static void explode(struct ecs_entity *projectile);
+// timer trigger to swich projectile team to neutral
+static void friendly_fire_timer_fn(struct ecs_entity *projectile);
 
 void weapon_system_fn(double time) {
   if (current_target) {
@@ -114,8 +118,8 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   collider->on_collision = hit_target;
   projectile->team = team;
   Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
-  timer->time_left = 6.0;
-  timer->timer_action = explode;
+  timer->time_left = 1.0;
+  timer->timer_action = friendly_fire_timer_fn;
   // make small explosion for launch
   scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");
 }
@@ -136,4 +140,11 @@ static void explode(struct ecs_entity *projectile) {
   scenery_make_explosion(projectile->position, (vector){3,3},
       explosion_animate_rate, al_map_rgb(255,255,255), "explosion1");
   ecs_entity_free(projectile);
+}
+
+static void friendly_fire_timer_fn(struct ecs_entity *projectile) {
+  projectile->team = TEAM_NEUTRAL;
+  Timer *t = &projectile->components[ECS_COMPONENT_TIMER]->timer;
+  t->time_left = 5.0;  // TODO: use projectile duration time
+  t->timer_action = explode;
 }
