@@ -14,5 +14,15 @@ static void update_timer(ecs_component *timer_comp) {
 void timer_system_fn(double time) {
   elapsed_time = time;
   list *timers = ecs_component_store[ECS_COMPONENT_TIMER];
-  list_each(timers, (list_lambda)update_timer);
+  list_node *node = timers->head;
+  while (node) {
+    ecs_component *comp = node->value;
+    if (comp->active) {
+      update_timer(comp);
+      node = node->next;
+    }
+    else {
+      node = list_remove(timers, node, free);
+    }
+  }
 }

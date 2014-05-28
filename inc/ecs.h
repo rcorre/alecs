@@ -34,9 +34,8 @@ typedef struct ecs_component {
   /** reference to entity that owns this component.
    *  can be used to locate sibling components */
   struct ecs_entity *owner_entity;
-  /** reference to location in \ref ecs_component_store.
-   *  used to remove from \ref ecs_component_store upon freeing component. */
-  list_node *node;
+  /** if true, update component. otherwise remove it */
+  bool active;
   /** data for a given component type */
   union {
     Body body;
@@ -110,7 +109,7 @@ void ecs_entity_free(ecs_entity *entity);
   * \param entity \ref ecs_entity to which the component will be attached
   * \param type type of component to attach
   * \return an \b UNINITIALIZED component.  The general component fields (\ref
-  * owner_entity, \ref type, \ref node) will be set, but the type-specific
+  * owner_entity, \ref type, \ref active) will be set, but the type-specific
   * fields must be initialized by the caller.
 **/
 ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type);

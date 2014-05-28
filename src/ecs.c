@@ -46,7 +46,9 @@ ecs_component* ecs_add_component(ecs_entity *entity, ecs_component_type type) {
   // place component in entity's component slot for that type
   entity->components[(int)type] = comp;
   // place component in global store, give it a pointer to its node
-  comp->node = list_push(ecs_component_store[(int)type], comp);
+  list_push(ecs_component_store[(int)type], comp);
+  // mark as active
+  comp->active = true;
   return comp;
 }
 
@@ -56,8 +58,8 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
   ecs_component *comp = entity->components[(int)type];
   // if entity did not have a component of this type, do nothing
   if (comp != NULL) {
-    // remove component from global component store and free its memory
-    list_remove(ecs_component_store[type], comp->node, free);
+    // mark component as inactive
+    comp->active = false;
     // make sure entity no longer references a component for that type
     entity->components[(int)type] = NULL;
   }

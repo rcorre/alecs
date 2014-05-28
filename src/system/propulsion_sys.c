@@ -7,7 +7,17 @@ static double elapsed_time;
 void propulsion_system_fn(double time) {
   elapsed_time = time;
   list *propulsion_list = ecs_component_store[ECS_COMPONENT_PROPULSION];
-  list_each(propulsion_list, (list_lambda)propulsion_update);
+  list_node *node = propulsion_list->head;
+  while (node) {
+    ecs_component *comp = node->value;
+    if (comp->active) {
+      propulsion_update(comp);
+      node = node->next;
+    }
+    else {
+      node = list_remove(propulsion_list, node, free);
+    }
+  }
 }
 
 static void propulsion_update(ecs_component *comp) {

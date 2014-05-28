@@ -23,6 +23,17 @@ static void update_health(ecs_component *health_comp) {
 void health_system_fn(double time) {
   elapsed_time = time;
   list *components = ecs_component_store[ECS_COMPONENT_HEALTH];
+  list_node *node = components->head;
+  while (node) {
+    ecs_component *comp = node->value;
+    if (comp->active) {
+      update_health(comp);
+      node = node->next;
+    }
+    else {
+      node = list_remove(components, node, free);
+    }
+  }
   list_each(components, (list_lambda)update_health);
 }
 

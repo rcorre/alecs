@@ -22,26 +22,32 @@ void ecs_handle_mouse(ALLEGRO_EVENT ev) {
   }
   list *components = ecs_component_store[(int)ECS_COMPONENT_MOUSE_LISTENER];
   list_node *node = components->head;
-  for (; node != NULL ; node = node->next) {
-    ecs_component *comp = (ecs_component*)node->value;
-    MouseListener *listener = &comp->mouse_listener;
-    struct ecs_entity *ent = comp->owner_entity;
-    assert(comp->type == ECS_COMPONENT_MOUSE_LISTENER);
-    // set mouse detection rect
-    listener->click_rect.x = ent->position.x - listener->click_rect.w / 2;
-    listener->click_rect.y = ent->position.y - listener->click_rect.h / 2;
-    // check if mouse just entered listener
-    if (listener->on_enter != NULL &&
-        rect_contains_point(listener->click_rect, mousepos) &&
-        !rect_contains_point(listener->click_rect, prev_mouse_pos))
-    {
-      listener->on_enter(ent);
+  while (node) {
+    ecs_component *comp = node->value;
+    if (comp->active) {
+      MouseListener *listener = &comp->mouse_listener;
+      struct ecs_entity *ent = comp->owner_entity;
+      assert(comp->type == ECS_COMPONENT_MOUSE_LISTENER);
+      // set mouse detection rect
+      listener->click_rect.x = ent->position.x - listener->click_rect.w / 2;
+      listener->click_rect.y = ent->position.y - listener->click_rect.h / 2;
+      // check if mouse just entered listener
+      if (listener->on_enter != NULL &&
+          rect_contains_point(listener->click_rect, mousepos) &&
+          !rect_contains_point(listener->click_rect, prev_mouse_pos))
+      {
+        listener->on_enter(ent);
+      }
+      else if (listener->on_leave != NULL &&
+          !rect_contains_point(listener->click_rect, mousepos) &&
+          rect_contains_point(listener->click_rect, prev_mouse_pos))
+      {
+        listener->on_leave(ent);
+      }
+      node = node->next;
     }
-    else if (listener->on_leave != NULL &&
-        !rect_contains_point(listener->click_rect, mousepos) &&
-        rect_contains_point(listener->click_rect, prev_mouse_pos))
-    {
-      listener->on_leave(ent);
+    else {
+      node = list_remove(components, node, free);
     }
   }
   prev_mouse_pos = mousepos;

@@ -15,11 +15,15 @@ static double roll_back_collision(ecs_entity *e1, Body *b1, Collider *c1,
 static void elastic_collision(Body *bod1, Body *bod2);
 
 void collision_system_fn(double time) {
-  list_node *node = ecs_component_store[ECS_COMPONENT_COLLIDER]->head;
+  list *comp_list = ecs_component_store[ECS_COMPONENT_COLLIDER];
+  list_node *node = comp_list->head;
   while(node) {
-    list_node *temp = node->next;
     ecs_component *comp = node->value;
     assert(comp->type == ECS_COMPONENT_COLLIDER);
+    if (!comp->active) {
+      node = list_remove(comp_list, node, free);
+      continue;
+    }
     ecs_entity *entity = comp->owner_entity;    // entity owning collider
     Collider *collider = &comp->collider; // collider component
     collider->rect.x = entity->position.x - collider->rect.w / 2.0;
@@ -30,8 +34,8 @@ void collision_system_fn(double time) {
     // check collision against other colliders
     list_node *other = node->next;
     while(other) {
-      list_node *temp_other = other->next;
       ecs_component *other_comp = other->value;
+      if (!other_comp->active) { other = other->next; continue; }
       ecs_entity *other_entity = other_comp->owner_entity;
       Collider *other_col = &other_comp->collider;
       other_col->rect.x = other_entity->position.x - other_col->rect.w / 2.0;
@@ -39,11 +43,9 @@ void collision_system_fn(double time) {
       if (!(ecs_same_team(entity, other_entity))) {
         try_entity_collision(entity, collider, other_entity, other_col, time);
       }
-      // check if the current collider was removed from the current entity
-      if (entity->components[ECS_COMPONENT_COLLIDER] != comp) {break;}
-      other = temp_other;
+      other = other->next;
     }
-    node = temp;
+    node = node->next;
   }
 }
 

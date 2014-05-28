@@ -10,7 +10,17 @@ static void limit_speed(Body *b);
 void body_system_fn(double time) {
   elapsed_time = time;
   list *body_list = ecs_component_store[(int)ECS_COMPONENT_BODY];
-  list_each(body_list, (list_lambda)update_body);
+  list_node *node = body_list->head;
+  while (node) {
+    ecs_component *body_comp = node->value;
+    if (body_comp->active) {
+      update_body(body_comp);
+      node = node->next;
+    }
+    else {
+      node = list_remove(body_list, node, free);
+    }
+  }
 }
 
 void make_constant_vel_body(Body *b, vector vel) {

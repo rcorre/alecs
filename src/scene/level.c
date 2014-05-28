@@ -33,8 +33,24 @@ static bool level_update(double time) {
 
 static void level_draw(void) {
 #ifndef NDEBUG
+  static char* comp_names[] = { 
+    "Body",
+    "Collider",
+    "Propulsion",
+    "Health",
+    "Timer",
+    "Behavior",
+    "Keyboard_listener",
+    "Mouse_listener"
+  };
   al_draw_textf(main_font, al_map_rgb(255,0,0), 0, 0, 0,
       "#entities: %d", ecs_entities->length);
+  // component counts
+  for (int i = 0; i < NUM_COMPONENT_TYPES; i++) {
+    list *comp_list = ecs_component_store[i];
+    al_draw_textf(main_font, al_map_rgb(200,0,200), 0, 300 + 40 * i, 0,
+        "#%s: %d", comp_names[i], comp_list->length);
+  }
 #endif
 }
 
