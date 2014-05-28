@@ -47,6 +47,7 @@ typedef struct ecs_component {
     KeyboardListener keyboard_listener;
     MouseListener mouse_listener;
   };
+  void (*on_destroy)(struct ecs_component *self);
 } ecs_component;
 
 typedef enum ecs_entity_team {

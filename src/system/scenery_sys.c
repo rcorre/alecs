@@ -67,5 +67,5 @@ void scenery_make_explosion(vector pos, vector size, double anim_rate,
       anim_rate, ANIMATE_ONCE);
   anim->scale = size;
   anim->tint = tint;
-  al_game_play_sound(sound_name);
+  al_game_play_sound(sound_name, false); // false: dont loop
 }

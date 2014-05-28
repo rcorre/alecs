@@ -41,3 +41,14 @@ static void propulsion_update(ecs_component *comp) {
     spawn_particles(&p.particle_effect, elapsed_time, 1.0, b->velocity);
   }
 }
+
+static void propulsion_stop_sample(ecs_component *comp) {
+  al_stop_sample(&comp->propulsion._sample_id);
+}
+
+void propulsion_assign_sound(struct ecs_entity *prop_entity, char *sound_name) {
+  ecs_component *prop_comp = prop_entity->components[ECS_COMPONENT_PROPULSION];
+  Propulsion *prop = &prop_comp->propulsion;
+  prop->_sample_id = al_game_play_sound(sound_name, true);
+  prop_comp->on_destroy = propulsion_stop_sample;
+}

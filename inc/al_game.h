@@ -63,7 +63,9 @@ ALLEGRO_SAMPLE* al_game_get_sound(const char *name);
 
 /** play a sound directly by its name.
   * \param name source sound filename without extension
+  * \loop if true, loop; otherwise play once
+  * \return id of played sample (can be passed to al_stop_sample)
 **/
-void al_game_play_sound(const char *name);
+ALLEGRO_SAMPLE_ID al_game_play_sound(const char *name, bool loop);
 
 #endif /* end of include guard: AL_GAME_H */

@@ -175,7 +175,10 @@ static void* sound_from_file(const char *filename) {
   return al_load_sample(filename);
 }
 
-void al_game_play_sound(const char *name) {
+ALLEGRO_SAMPLE_ID al_game_play_sound(const char *name, bool loop) {
   ALLEGRO_SAMPLE *sound = al_game_get_sound(name);
-  al_play_sample(sound, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+  ALLEGRO_SAMPLE_ID id;
+  al_play_sample(sound, 1, 0, 1, loop ? ALLEGRO_PLAYMODE_LOOP :
+      ALLEGRO_PLAYMODE_ONCE, &id); 
+  return id;
 }

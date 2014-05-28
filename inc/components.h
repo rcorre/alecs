@@ -89,6 +89,7 @@ typedef struct Propulsion {
    *  +/-1.0 is full turn_rate clockwise/counterclockwise, 0 is off */
   double angular_throttle;
   particle_generator particle_effect;
+  ALLEGRO_SAMPLE_ID _sample_id;
 } Propulsion;
 
 /** comonent indicating that an \ref ecs_entity can take damage */

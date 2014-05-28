@@ -58,6 +58,8 @@ void ecs_remove_component(ecs_entity *entity, ecs_component_type type) {
   ecs_component *comp = entity->components[(int)type];
   // if entity did not have a component of this type, do nothing
   if (comp != NULL) {
+    // give it a chance to clean up
+    if (comp->on_destroy != NULL) { comp->on_destroy(comp); }
     // mark component as inactive
     comp->active = false;
     // make sure entity no longer references a component for that type

@@ -13,6 +13,7 @@ ecs_entity* make_player_ship() {
   prop->propulsion.linear_accel = 1500;
   prop->propulsion.turn_rate = PI;
   prop->propulsion.particle_effect = get_particle_generator("player-engine");
+  propulsion_assign_sound(player, "jet_engine");
   // body component
   ecs_component *bod = ecs_add_component(player, ECS_COMPONENT_BODY);
   bod->body.max_linear_velocity = 500;
