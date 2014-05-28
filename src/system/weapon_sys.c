@@ -5,7 +5,7 @@
 // lockon constants
 static const float indicator_radius = 18;
 static const float indicator_thickness = 5;
-// time after which projectiles become neutrally aligned
+// grace period after launching during which a projectile cannot hit friendlies
 static const double friendly_fire_time = 1;
 #define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 200)
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
@@ -118,7 +118,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   collider->on_collision = hit_target;
   projectile->team = team;
   Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
-  timer->time_left = 1.0;
+  timer->time_left = friendly_fire_time;
   timer->timer_action = friendly_fire_timer_fn;
   // make small explosion for launch
   scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");

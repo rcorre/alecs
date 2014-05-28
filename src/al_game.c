@@ -1,5 +1,7 @@
 #include "al_game.h"
 
+static const int num_simultaneous_audio_samples = 5;
+
 ALLEGRO_DISPLAY *display;
 ALLEGRO_EVENT_QUEUE *event_queue;
 ALLEGRO_TIMER *frame_timer;
@@ -14,7 +16,6 @@ static stringmap* load_resource_dir(const char *path, resource_load_fn loader,
 static void* bitmap_from_file(const char *filename);
 static void* font_from_file(const char *filename);
 static void* sound_from_file(const char *filename);
-static int count_dir_entries(const char *path);
 
 int al_game_init() {
   srand((unsigned)time(NULL));
@@ -46,9 +47,8 @@ int al_game_init() {
     fprintf(stderr, "failed to init acodec addon\n");
     return -1;
   }
-  // reserve one sound sample for each entry in the sound resource file
-  if (!al_reserve_samples(count_dir_entries(SOUND_DIR))) { 
-    fprintf(stderr, "failed to init acodec addon\n");
+  if (!al_reserve_samples(num_simultaneous_audio_samples)) { 
+    fprintf(stderr, "failed to reserve audio samples\n");
     return -1;
   }
   if (!al_init_image_addon()) {
@@ -161,19 +161,6 @@ static stringmap* load_resource_dir(const char *path, resource_load_fn loader,
     al_destroy_fs_entry(res_file_entry);
   }
   return res_map;
-}
-
-static int count_dir_entries(const char *path) {
-  ALLEGRO_FS_ENTRY *dir_entry = al_create_fs_entry(path);
-  // open the directory to read all entries
-  if (!al_open_directory(dir_entry)) {
-    fprintf(stderr, "count_dir_entries failed to open directory %s\n", path);
-    abort();
-  }
-  int count = 0;
-  // count the entries
-  while (al_read_directory(dir_entry)) { ++count; }
-  return count;
 }
 
 static void* bitmap_from_file(const char *filename) {
