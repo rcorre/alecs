@@ -117,8 +117,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   timer->time_left = 6.0;
   timer->timer_action = explode;
   // make small explosion for launch
-  scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1));
-  al_game_play_sound("launch");
+  scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");
 }
 
 static void draw_lockon(struct ecs_entity *target) {
@@ -135,6 +134,6 @@ static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
 
 static void explode(struct ecs_entity *projectile) {
   scenery_make_explosion(projectile->position, (vector){3,3},
-      explosion_animate_rate, al_map_rgb(255,255,255));
+      explosion_animate_rate, al_map_rgb(255,255,255), "explosion1");
   ecs_entity_free(projectile);
 }

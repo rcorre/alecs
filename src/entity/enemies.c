@@ -14,7 +14,8 @@ static void fire_at_player(ecs_entity *enemy) {
 }
 
 static void asplode_enemy(ecs_entity *enemy) {
-  scenery_make_explosion(enemy->position, (vector){6,4}, 40, al_map_rgb(255,160,160));
+  scenery_make_explosion(enemy->position, (vector){6,4}, 40,
+      al_map_rgb(255,160,160), "explosion1"); 
   ecs_entity_free(enemy);
 }
 

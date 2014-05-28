@@ -33,8 +33,8 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec) {
 }
 
 void scenery_add_background(const char *name, int depth, double speed, int
-    offset) 
-{ 
+    offset)
+{
   ecs_entity *bg = ecs_entity_new((vector){SCREEN_W / 2 + offset, SCREEN_H / 2});
   ecs_attach_sprite(bg, name, depth);
   Body *body = &ecs_add_component(bg, ECS_COMPONENT_BODY)->body;
@@ -60,12 +60,12 @@ static void make_cloud() {
 }
 
 void scenery_make_explosion(vector pos, vector size, double anim_rate,
-    ALLEGRO_COLOR tint) 
+    ALLEGRO_COLOR tint, const char *sound_name)
 {
   ecs_entity *boom = ecs_entity_new(pos);
   sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
       anim_rate, ANIMATE_ONCE);
   anim->scale = size;
   anim->tint = tint;
-  al_game_play_sound("explosion1");
+  al_game_play_sound(sound_name);
 }

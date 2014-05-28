@@ -23,8 +23,9 @@ void scenery_add_background(const char *name, int depth, double speed, int
   * \param size x and y scale of explosion
   * \param anim_rate rate of animation for explosion
   * \param tint shade of explosion
+  * \param sound_name name of sound effect to play
 **/
 void scenery_make_explosion(vector pos, vector size, double anim_rate,
-    ALLEGRO_COLOR tint);
+    ALLEGRO_COLOR tint, const char *sound_name);
 
 #endif /* end of include guard: SCENERY_H */
