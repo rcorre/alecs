@@ -185,6 +185,10 @@ void launch_flare(vector pos) {
   collider->on_collision = hit_target;
   projectile->team = team;
   */
+  // timer to destroy flare after 6 seconds
+  Timer *t = &ecs_add_component(flare, ECS_COMPONENT_TIMER)->timer;
+  t->time_left = 6;
+  t->timer_action = ecs_entity_free;
   // make small explosion for launch
   scenery_make_explosion(pos, (vector){1,2}, 50, al_map_rgb_f(1,0,0), "launch");
 }
