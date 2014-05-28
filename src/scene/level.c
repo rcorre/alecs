@@ -12,12 +12,12 @@ static Weapon current_weapon = {
   .name = "seeker",
   .particle_effect = "seeker-rocket",
   .max_lockons = 5,
-  .lockon_time = 0.2,
+  .lockon_time = 0.1,
   .offset = {0, 10},
   .initial_speed = 100,
-  .max_speed = 300,
-  .acceleration = 1200,
-  .turn_rate = 2 * PI,
+  .max_speed = 400,
+  .acceleration = 1800,
+  .turn_rate = 1.5 * PI,
   .power = 5,
   .radius = 20
 };
@@ -33,7 +33,7 @@ static bool level_update(double time) {
 
 static void level_draw(void) {
 #ifndef NDEBUG
-  static char* comp_names[] = { 
+  static char* comp_names[] = {
     "Body",
     "Collider",
     "Propulsion",

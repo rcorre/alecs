@@ -120,6 +120,12 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = friendly_fire_time;
   timer->timer_action = friendly_fire_timer_fn;
+  // mouse listener (for weapon lockon)
+  MouseListener *listener =
+    &ecs_add_component(projectile, ECS_COMPONENT_MOUSE_LISTENER)->mouse_listener;
+  listener->click_rect = collider->rect;
+  listener->on_enter = weapon_set_target;
+  listener->on_leave = weapon_clear_target;
   // make small explosion for launch
   scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");
 }
