@@ -7,6 +7,8 @@ static const float indicator_radius = 18;
 static const float indicator_thickness = 5;
 // grace period after launching during which a projectile cannot hit friendlies
 static const double friendly_fire_time = 1;
+// flare's effect area
+static const double flare_radius = 250;
 #define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 200)
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
 
@@ -95,7 +97,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
     struct ecs_entity *target, ecs_entity_team team)
 {
   vector fire_pos = vector_add(firing_entity->position, current_weapon->offset);
-  struct ecs_entity *projectile = ecs_entity_new(firing_entity->position);
+  struct ecs_entity *projectile = ecs_entity_new(firing_entity->position, ENTITY_MISSILE);
   projectile->position = fire_pos;
   projectile->angle = -PI / 2;
   ecs_attach_sprite(projectile, "seeker", 0);
@@ -138,8 +140,14 @@ static void draw_lockon(struct ecs_entity *target) {
 
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
 {
-  deal_damage(target, 10);
-  explode(projectile);
+  if (target->tag == ENTITY_FLARE) {
+    // get distracted by flare
+    projectile->components[ECS_COMPONENT_BEHAVIOR]->behavior.target = target;
+  }
+  else {
+    deal_damage(target, 10);
+    explode(projectile);
+  }
 }
 
 static void explode(struct ecs_entity *projectile) {
@@ -156,7 +164,7 @@ static void friendly_fire_timer_fn(struct ecs_entity *projectile) {
 }
 
 void launch_flare(vector pos) {
-  struct ecs_entity *flare = ecs_entity_new(pos);
+  struct ecs_entity *flare = ecs_entity_new(pos, ENTITY_FLARE);
   flare->angle = -PI / 2;
   /*
   sprite *s = ecs_attach_sprite(flare, "explosion", 3);
@@ -168,7 +176,7 @@ void launch_flare(vector pos) {
   */
   Body *b = &ecs_add_component(flare, ECS_COMPONENT_BODY)->body;
   b->max_linear_velocity = 600;
-  b->velocity = (vector){-50, -500};
+  b->velocity = (vector){-50, -600};
   b->destroy_on_exit = NONE;
   Propulsion *p =
     &ecs_add_component(flare, ECS_COMPONENT_PROPULSION)->propulsion;
@@ -178,13 +186,8 @@ void launch_flare(vector pos) {
   p->particle_effect =
     get_particle_generator("flare");
   p->directed = true;
-  /*
-  Collider *collider = &ecs_add_component(projectile,
-      ECS_COMPONENT_COLLIDER)->collider;
-  collider->rect = hitrect_from_sprite(projectile->sprite);
-  collider->on_collision = hit_target;
-  projectile->team = team;
-  */
+  Collider *col = &ecs_add_component(flare, ECS_COMPONENT_COLLIDER)->collider;
+  col->rect = (rectangle){.w = flare_radius, .h = flare_radius};
   // timer to destroy flare after 6 seconds
   Timer *t = &ecs_add_component(flare, ECS_COMPONENT_TIMER)->timer;
   t->time_left = 6;

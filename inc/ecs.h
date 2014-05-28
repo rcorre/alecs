@@ -56,8 +56,19 @@ typedef enum ecs_entity_team {
   TEAM_ENEMY    = 0x2
 } ecs_entity_team;
 
+/** descriptive tag to identify the "class" of a \ref ecs_entity  */
+typedef enum ecs_entity_tag {
+  ENTITY_EXPLOSION,
+  ENTITY_SHIP,
+  ENTITY_FLARE,
+  ENTITY_MISSILE,
+  ENTITY_SCENIC
+} ecs_entity_tag;
+
 /** a game object composed of \ref ecs_components */
 typedef struct ecs_entity {
+  /** identifies the nature of the entity */
+  ecs_entity_tag tag;
   /** absolute location of entity's center */
   vector position;
   /** rotation of entity about its center (\b radians) */
@@ -98,7 +109,7 @@ void ecs_init();
   * \param position initial location of the center point of the new entity
   * \return a new \ref ecs_entity. free with \ref ecs_entity_free.
 **/
-ecs_entity *ecs_entity_new(vector position);
+ecs_entity *ecs_entity_new(vector position, ecs_entity_tag tag);
 
 /** free an entity and every \ref ecs_component attached to it
   * \param entity entity to be destroyed

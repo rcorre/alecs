@@ -35,7 +35,8 @@ void scenery_sys_set_cloud_frequency(double clouds_per_sec) {
 void scenery_add_background(const char *name, int depth, double speed, int
     offset)
 {
-  ecs_entity *bg = ecs_entity_new((vector){SCREEN_W / 2 + offset, SCREEN_H / 2});
+  ecs_entity *bg = ecs_entity_new((vector){SCREEN_W / 2 + offset, SCREEN_H / 2},
+      ENTITY_SCENIC); 
   ecs_attach_sprite(bg, name, depth);
   Body *body = &ecs_add_component(bg, ECS_COMPONENT_BODY)->body;
   make_constant_vel_body(body, (vector){-speed, 0});
@@ -47,7 +48,8 @@ static void make_cloud() {
   int depth = randi(cloud_min_depth, cloud_max_depth);
   double speed = -randd(cloud_min_speed, cloud_max_speed);
   double alpha = randd(cloud_min_opacity, cloud_max_opacity);
-  ecs_entity *cloud = ecs_entity_new((vector){.x = start_x, .y = start_y});
+  ecs_entity *cloud = ecs_entity_new((vector){.x = start_x, .y = start_y},
+      ENTITY_SCENIC); 
   sprite* s = ecs_attach_sprite(cloud, "cloud", depth);
   s->scale = (vector){
     randd(cloud_min_scale.x, cloud_max_scale.y),
@@ -62,7 +64,7 @@ static void make_cloud() {
 void scenery_make_explosion(vector pos, vector size, double anim_rate,
     ALLEGRO_COLOR tint, const char *sound_name)
 {
-  ecs_entity *boom = ecs_entity_new(pos);
+  ecs_entity *boom = ecs_entity_new(pos, ENTITY_EXPLOSION);
   sprite *anim = ecs_attach_animation(boom, "explosion", 1, 32, 32,
       anim_rate, ANIMATE_ONCE);
   anim->scale = size;

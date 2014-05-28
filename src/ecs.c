@@ -22,10 +22,11 @@ void ecs_init() {
   list_push(ecs_systems, health_system_fn);
 }
 
-ecs_entity* ecs_entity_new(vector position) {
+ecs_entity* ecs_entity_new(vector position, ecs_entity_tag tag) {
   ecs_entity *entity = calloc(1, sizeof(ecs_entity));
   entity->position = position;
   entity->_node = list_push(ecs_entities, entity); // push onto entity list
+  entity->tag = tag;
   return entity;
 }
 

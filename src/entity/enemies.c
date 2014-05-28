@@ -47,7 +47,7 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
     default:
       start = pos;
   }
-  ecs_entity *enemy = ecs_entity_new((vector)start);
+  ecs_entity *enemy = ecs_entity_new((vector)start, ENTITY_SHIP);
   // sprite
   ecs_attach_animation(enemy, "enemy1", 1, 64, 24, 6, ANIMATE_LOOP);
   // body
