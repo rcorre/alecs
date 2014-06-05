@@ -2,6 +2,14 @@
 #define WEAPON_SYS_H
 
 #include "ecs.h"
+#include "system/health_sys.h"
+#include "system/scenery_sys.h"
+
+typedef enum WeaponState {
+  WEAPON_READY,
+  WEAPON_FIRING,
+  WEAPON_RELOADING
+} WeaponState;
 
 typedef struct Weapon {
   const char *name;
@@ -15,10 +23,11 @@ typedef struct Weapon {
   double turn_rate;
   double power;
   double radius;
+  double fire_delay;
 } Weapon;
 
 /** set weapons for the weapon system */
-void weapon_system_set_weapons(Weapon *primary, Weapon *secondary);
+void weapon_system_set_weapons(struct ecs_entity *player, Weapon *wep1, Weapon *wep2);
 
 /** update the weapon system */
 void weapon_system_fn(double time);
@@ -33,7 +42,7 @@ void weapon_set_target(struct ecs_entity *target);
 void weapon_clear_target(struct ecs_entity *target);
 
 /** fire the player's current weapon */
-void weapon_fire_player(struct ecs_entity *player);
+void weapon_fire_player();
 
 /** fire an enemy's weapon. player is type void* for use as a delegate arg */
 void weapon_fire_enemy(struct ecs_entity *enemy, void *player);

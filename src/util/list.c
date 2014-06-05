@@ -32,6 +32,12 @@ list_node* list_push(list *list, void *value) {
   return new;
 }
 
+void* list_popfront(list *list) {
+  void *val = list->head->value;
+  list_remove(list, list->head, NULL);
+  return val;
+}
+
 list_node* list_remove(list *list, list_node *node, list_lambda fn) {
   list_node *next = node->next;
   list_node *prev = node->prev;

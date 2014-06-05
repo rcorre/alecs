@@ -1,6 +1,4 @@
 #include "system/weapon_sys.h"
-#include "system/health_sys.h"
-#include "system/scenery_sys.h"
 
 // lockon constants
 static const float indicator_radius = 18;
@@ -16,9 +14,12 @@ static const double flare_radius = 250;
 static const double explosion_animate_rate = 50; // frames/sec
 
 static struct ecs_entity *current_target;
+static struct ecs_entity *player_entity;
 static double current_lockon_time;
 static list *lockon_list;
 static Weapon *current_weapon, *alternate_weapon;
+static WeaponState current_weapon_state = WEAPON_READY;
+static double till_next_fire;
 
 static void fire_at_target(struct ecs_entity *fired_by,
     struct ecs_entity *target, ecs_entity_team team);
@@ -36,6 +37,18 @@ void weapon_system_fn(double time) {
     if (current_lockon_time > current_weapon->lockon_time) {
       list_push(lockon_list, current_target);
       weapon_clear_target(current_target);
+    }
+  }
+  
+  if (current_weapon_state == WEAPON_FIRING) {
+    till_next_fire -= time;
+    if (till_next_fire < 0 && lockon_list->length > 0) {
+      till_next_fire = current_weapon->fire_delay;
+      struct ecs_entity *target = list_popfront(lockon_list);
+      fire_at_target(player_entity, target, TEAM_FRIENDLY);
+      if (lockon_list->length == 0) { // fired at last lockon
+        current_weapon_state = WEAPON_READY;
+      }
     }
   }
 }
@@ -66,23 +79,21 @@ void weapon_clear_target(struct ecs_entity *target) {
   }
 }
 
-void weapon_system_set_weapons(Weapon *primary, Weapon *secondary) {
+void weapon_system_set_weapons(struct ecs_entity *player, Weapon *wep1, Weapon *wep2) {
   if (!lockon_list) { lockon_list = list_new(); }
-  current_weapon = primary;
-  alternate_weapon = secondary;
+  player_entity = player;
+  current_weapon = wep1;
+  alternate_weapon = wep2;
 }
 
-void weapon_fire_player(struct ecs_entity *fired_by) {
-  // fire at each target, then remove it from the list
-  for (list_node *node = lockon_list->head; node; node = node->next) {
-    ecs_entity *target = (ecs_entity*)node->value;
-    fire_at_target(fired_by, target, TEAM_FRIENDLY);
+void weapon_fire_player() {
+  if (current_weapon_state == WEAPON_READY) {
+    current_weapon_state = WEAPON_FIRING;
   }
-  list_clear(lockon_list, NULL);
 }
 
 void weapon_fire_enemy(struct ecs_entity *enemy, void *player) {
-  fire_at_target(enemy, (ecs_entity*)player, TEAM_ENEMY);
+  fire_at_target(enemy, (struct ecs_entity*)player, TEAM_ENEMY);
 }
 
 void weapon_swap() {
@@ -166,14 +177,6 @@ static void friendly_fire_timer_fn(struct ecs_entity *projectile) {
 void launch_flare(vector pos) {
   struct ecs_entity *flare = ecs_entity_new(pos, ENTITY_FLARE);
   flare->angle = -PI / 2;
-  /*
-  sprite *s = ecs_attach_sprite(flare, "explosion", 3);
-  s->frame_width = 64;
-  s->frame_height = 64;
-  s->scale = (vector){0.5, 0.5};
-  s->tint = al_map_rgb_f(1,0,0);
-  s->
-  */
   Body *b = &ecs_add_component(flare, ECS_COMPONENT_BODY)->body;
   b->max_linear_velocity = 600;
   b->velocity = (vector){-50, -600};

@@ -35,6 +35,8 @@ void list_clear(list *list, list_lambda fn);
 void list_free(list *list, list_lambda fn);
 /** \brief prepend node containing value to list */
 list_node* list_push(list *list, void *value);
+/** \brief remove and retrieve head of list */
+void* list_popfront(list *list);
 /** \brief remove node from list.
     if fn is not NULL, call fn on every value. Else call free on every value.
     returns pointer to next node
