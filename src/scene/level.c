@@ -15,8 +15,8 @@ static Weapon current_weapon = {
   .lockon_time = 0.1,
   .offset = {0, 10},
   .initial_speed = 100,
-  .max_speed = 400,
-  .acceleration = 1800,
+  .max_speed = 500,
+  .acceleration = 2500,
   .turn_rate = 1.5 * PI,
   .power = 5,
   .radius = 20
@@ -90,6 +90,7 @@ scene level_new(void) {
   spawn_enemy((vector){600,100}, NORTH, player_ship);
   spawn_enemy((vector){900,100}, EAST, player_ship);
   spawn_enemy((vector){600,600}, SOUTH, player_ship);
+  spawn_mine(EAST, player_ship);
   return (scene){
     .update = level_update,
     .draw = level_draw,

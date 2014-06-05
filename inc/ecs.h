@@ -62,6 +62,7 @@ typedef enum ecs_entity_tag {
   ENTITY_SHIP,
   ENTITY_FLARE,
   ENTITY_MISSILE,
+  ENTITY_HAZARD,
   ENTITY_SCENIC
 } ecs_entity_tag;
 

@@ -83,3 +83,44 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   health_comp->health = make_health(10, start_crashing, "smoke");
   return enemy;
 }
+
+static void mine_collide(ecs_entity *mine, ecs_entity *player) {
+  deal_damage(player, 10);
+  asplode_enemy(mine);
+}
+
+ecs_entity* spawn_mine(Direction enter_from, ecs_entity *player) {
+  vector start = {SCREEN_W, 300};
+  ecs_entity *mine = ecs_entity_new((vector)start, ENTITY_SHIP);
+  // sprite
+  ecs_attach_sprite(mine, "mine", 3);
+  // body
+  Body *bod = &ecs_add_component(mine, ECS_COMPONENT_BODY)->body;
+  bod->max_linear_velocity = 200;
+  bod->mass = 10;
+  // collider
+  Collider *col = &ecs_add_component(mine, ECS_COMPONENT_COLLIDER)->collider;
+  col->rect = hitrect_from_sprite(mine->sprite);
+  col->on_collision = mine_collide;
+  // mouse listener
+  MouseListener *listener =
+    &ecs_add_component(mine, ECS_COMPONENT_MOUSE_LISTENER)->mouse_listener;
+  listener->click_rect = col->rect;
+  listener->on_enter = weapon_set_target;
+  listener->on_leave = weapon_clear_target;
+  // propulsion
+  Propulsion *pro = &ecs_add_component(mine, ECS_COMPONENT_PROPULSION)->propulsion;
+  pro->linear_accel = 300;
+  pro->turn_rate = 1*PI;
+  // behavior
+  Behavior *beh = &ecs_add_component(mine, ECS_COMPONENT_BEHAVIOR)->behavior;
+  beh->target = player;
+  beh->type = BEHAVIOR_FOLLOW;
+  mine->team = TEAM_ENEMY;
+  Timer *timer = &ecs_add_component(mine, ECS_COMPONENT_TIMER)->timer;
+  timer->time_left = 10;
+  timer->timer_action = asplode_enemy;
+  ecs_component *health_comp = ecs_add_component(mine, ECS_COMPONENT_HEALTH);
+  health_comp->health = make_health(10, start_crashing, "smoke");
+  return mine;
+}
