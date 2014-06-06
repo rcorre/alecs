@@ -56,7 +56,7 @@ Weapon seeker_launcher = {
   .particle_effect = "seeker-rocket",
   .max_lockons = 5,
   .lockon_time = 0.1,
-  .offset = {0, 10},
+  .offset = {0, -10},
   .initial_velocity = {0, 100},
   .max_speed = 500,
   .acceleration = 2500,
@@ -71,7 +71,7 @@ Weapon destroyer_launcher = {
   .particle_effect = "destroyer-rocket",
   .max_lockons = 5,
   .lockon_time = 0.4,
-  .offset = {0, -10},
+  .offset = {0, 10},
   .initial_velocity = {-300, 400},
   .max_speed = 1000,
   .acceleration = 1000,
@@ -79,4 +79,19 @@ Weapon destroyer_launcher = {
   .power = 10,
   .fire_delay = 0.33,
   .radius = 40
+};
+
+Weapon swarmer_launcher = {
+  .name = "swarmer",
+  .particle_effect = "swarmer-rocket",
+  .max_lockons = 15,
+  .lockon_time = 0.05,
+  .offset = {0, -10},
+  .initial_velocity = {300, 400},
+  .max_speed = 500,
+  .acceleration = 2000,
+  .turn_rate = 1.2 * PI,
+  .power = 5,
+  .fire_delay = 0.1,
+  .radius = 15
 };

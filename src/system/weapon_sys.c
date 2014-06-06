@@ -113,7 +113,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   struct ecs_entity *projectile = ecs_entity_new(firing_entity->position, ENTITY_MISSILE);
   projectile->position = fire_pos;
   projectile->angle = -PI / 2;
-  ecs_attach_sprite(projectile, "seeker", 0);
+  ecs_attach_sprite(projectile, current_weapon->name, 0);
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
   b->velocity = current_weapon->initial_velocity;
   b->max_linear_velocity = current_weapon->max_speed;

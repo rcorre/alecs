@@ -9,5 +9,6 @@ ecs_entity* make_player_ship();
 // Weapons
 extern Weapon seeker_launcher;
 extern Weapon destroyer_launcher;
+extern Weapon swarmer_launcher;
 
 #endif /* end of include guard: PLAYER_H */
