@@ -73,8 +73,6 @@ scene level_new(void) {
   player_ship = make_player_ship();
   weapon_system_set_weapons(player_ship, &swarmer_launcher, &destroyer_launcher);
   scenery_add_background("sunset", -SPRITE_LAYER_LIMIT, 0, 0);
-  scenery_add_background("mountains2", -SPRITE_LAYER_LIMIT + 1, 15, 0);
-  scenery_add_background("mountains1", -SPRITE_LAYER_LIMIT + 2, 30, 0);
   //TODO: automate
   spawn_enemy((vector){300,100}, WEST, player_ship);
   spawn_enemy((vector){600,100}, NORTH, player_ship);
