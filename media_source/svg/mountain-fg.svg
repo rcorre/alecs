@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="256"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="mountain-fg.svg"
+   inkscape:export-filename="/home/erethar/project/alecs/media/images/mountain-fg.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3851">
+      <stop
+         style="stop-color:#6e440b;stop-opacity:1;"
+         offset="0"
+         id="stop3853" />
+      <stop
+         style="stop-color:#a8a4b2;stop-opacity:1;"
+         offset="1"
+         id="stop3855" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3801">
+      <stop
+         style="stop-color:#ff3800;stop-opacity:0.87591243;"
+         offset="0"
+         id="stop3803" />
+      <stop
+         style="stop-color:#ff3800;stop-opacity:0.26277372;"
+         offset="1"
+         id="stop3805" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3759">
+      <stop
+         style="stop-color:#ffda00;stop-opacity:0.77372265;"
+         offset="0"
+         id="stop3761" />
+      <stop
+         style="stop-color:#ff6600;stop-opacity:0;"
+         offset="1"
+         id="stop3763" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3851"
+       id="linearGradient3857"
+       x1="-16.301178"
+       y1="708.10272"
+       x2="-13.35773"
+       y2="276.50693"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffff00"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.6511787"
+     inkscape:cx="9.6414266"
+     inkscape:cy="260.48581"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="958"
+     inkscape:window-height="1059"
+     inkscape:window-x="0"
+     inkscape:window-y="19"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1.3651012,-799.06186)">
+    <path
+       sodipodi:type="star"
+       style="fill:url(#linearGradient3857);fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path3830"
+       sodipodi:sides="3"
+       sodipodi:cx="5.7142859"
+       sodipodi:cy="717.14288"
+       sodipodi:r1="405.72437"
+       sodipodi:r2="202.86217"
+       sodipodi:arg1="-1.5778385"
+       sodipodi:arg2="-0.53064091"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 2.8571282,311.42858 180.67943,614.47714 358.50176,917.52566 7.1428567,920.00002 -344.21603,922.47441 -170.67943,616.95149 z"
+       transform="matrix(0.36095081,0.00338801,-0.0028928,0.41968535,128.27869,668.77518)"
+       inkscape:transform-center-x="0.071181013"
+       inkscape:transform-center-y="-42.494535"
+       inkscape:export-filename="/home/erethar/project/alecs/media/images/mountain-fg.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

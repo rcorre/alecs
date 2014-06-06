@@ -9,6 +9,11 @@ void scenery_system_fn(double time);
 /** set frequency at which clouds spawn */
 void scenery_sys_set_cloud_frequency(double clouds_per_sec);
 
+/** fill out scenery before level begins. 
+ *  Creates numerous entities, creating the appearance that the system has been
+ *  run for awhile*/
+void scenery_pre_populate();
+
 /** add a scrolling background
   * \param name name of bitmap resource to use for background
   * \param depth layer at which to draw background

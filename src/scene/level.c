@@ -73,6 +73,7 @@ scene level_new(void) {
   player_ship = make_player_ship();
   weapon_system_set_weapons(player_ship, &swarmer_launcher, &destroyer_launcher);
   scenery_add_background("sunset", -SPRITE_LAYER_LIMIT, 0, 0);
+  scenery_pre_populate();
   //TODO: automate
   spawn_enemy((vector){300,100}, WEST, player_ship);
   spawn_enemy((vector){600,100}, NORTH, player_ship);
