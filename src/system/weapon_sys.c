@@ -4,7 +4,7 @@
 static const float indicator_radius = 18;
 static const float indicator_thickness = 5;
 // grace period after launching during which a projectile cannot hit friendlies
-static const double friendly_fire_time = 1;
+static const double friendly_fire_time = 2;
 // flare's effect area
 static const double flare_radius = 250;
 #define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 200)
@@ -97,11 +97,13 @@ void weapon_fire_enemy(struct ecs_entity *enemy, void *player) {
 }
 
 void weapon_swap() {
-  Weapon *temp = current_weapon;
-  current_weapon = alternate_weapon;
-  alternate_weapon = temp;
-  list_clear(lockon_list, NULL);
-  weapon_clear_target(current_target);
+  if (alternate_weapon) {
+    Weapon *temp = current_weapon;
+    current_weapon = alternate_weapon;
+    alternate_weapon = temp;
+    list_clear(lockon_list, NULL);
+    weapon_clear_target(current_target);
+  }
 }
 
 static void fire_at_target(struct ecs_entity *firing_entity,
@@ -113,6 +115,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   projectile->angle = -PI / 2;
   ecs_attach_sprite(projectile, "seeker", 0);
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
+  b->velocity = current_weapon->initial_velocity;
   b->max_linear_velocity = current_weapon->max_speed;
   Propulsion *p =
     &ecs_add_component(projectile, ECS_COMPONENT_PROPULSION)->propulsion;
@@ -138,8 +141,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
     &ecs_add_component(projectile, ECS_COMPONENT_MOUSE_LISTENER)->mouse_listener;
   listener->click_rect = collider->rect;
   listener->on_enter = weapon_set_target;
-  listener->on_leave = weapon_clear_target;
-  // make small explosion for launch
+  listener->on_leave = weapon_clear_target; // make small explosion for launch
   scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");
 }
 

@@ -2,6 +2,7 @@
 
 static void kbd_handler(ecs_entity *e, int keycode, bool down);
 
+/* Functions ******************************************************************/
 ecs_entity* make_player_ship() {
   ecs_entity *player = ecs_entity_new((vector){.x = 50, .y = 400}, ENTITY_SHIP);
   ecs_attach_animation(player, "viper", 2, 64, 64, 8, ANIMATE_LOOP);
@@ -48,3 +49,34 @@ static void kbd_handler(ecs_entity *e, int keycode, bool down) {
       break;
   }
 }
+
+/* Weapons ********************************************************************/
+Weapon seeker_launcher = {
+  .name = "seeker",
+  .particle_effect = "seeker-rocket",
+  .max_lockons = 5,
+  .lockon_time = 0.1,
+  .offset = {0, 10},
+  .initial_velocity = {0, 100},
+  .max_speed = 500,
+  .acceleration = 2500,
+  .turn_rate = 1.5 * PI,
+  .power = 5,
+  .fire_delay = 0.33,
+  .radius = 20
+};
+
+Weapon destroyer_launcher = {
+  .name = "destroyer",
+  .particle_effect = "destroyer-rocket",
+  .max_lockons = 5,
+  .lockon_time = 0.4,
+  .offset = {0, -10},
+  .initial_velocity = {-300, 400},
+  .max_speed = 1000,
+  .acceleration = 1000,
+  .turn_rate = 6.0 * PI,
+  .power = 10,
+  .fire_delay = 0.33,
+  .radius = 40
+};

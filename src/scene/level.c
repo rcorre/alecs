@@ -7,22 +7,6 @@ static ecs_entity *player_ship;
 static ALLEGRO_FONT *main_font;
 static double next_enemy_time;
 
-// TODO: testing only
-static Weapon current_weapon = {
-  .name = "seeker",
-  .particle_effect = "seeker-rocket",
-  .max_lockons = 5,
-  .lockon_time = 0.1,
-  .offset = {0, 10},
-  .initial_speed = 100,
-  .max_speed = 500,
-  .acceleration = 2500,
-  .turn_rate = 1.5 * PI,
-  .power = 5,
-  .fire_delay = 0.33,
-  .radius = 20
-};
-
 static bool level_update(double time) {
   next_enemy_time -= time;
   if (next_enemy_time <= 0) {
@@ -63,7 +47,12 @@ static void level_draw(void) {
 
 static void level_handle_mouse(ALLEGRO_MOUSE_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-    weapon_fire_player(); // fire player's current weapon
+    if (ev.button == 1) {
+      weapon_fire_player(); // fire player's current weapon
+    }
+    else if (ev.button == 2) {
+      weapon_swap(); // swap player's current weapon
+    }
   }
 }
 
@@ -82,7 +71,7 @@ static void level_shutdown() {
 scene level_new(void) {
   main_font = al_game_get_font("LiberationMono-Regular");
   player_ship = make_player_ship();
-  weapon_system_set_weapons(player_ship, &current_weapon, &current_weapon);
+  weapon_system_set_weapons(player_ship, &seeker_launcher, &destroyer_launcher);
   scenery_add_background("sunset", -SPRITE_LAYER_LIMIT, 0, 0);
   scenery_add_background("mountains2", -SPRITE_LAYER_LIMIT + 1, 15, 0);
   scenery_add_background("mountains1", -SPRITE_LAYER_LIMIT + 2, 30, 0);
