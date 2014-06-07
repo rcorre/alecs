@@ -69,6 +69,14 @@ list_node* list_find(list *list, void *value) {
   return node;
 }
 
+int list_count(list *list, void *value) {
+  int count = 0;
+  for (list_node *node = list->head; node; node = node->next) {
+    if (node->value == value) { ++count; }
+  }
+  return count;
+}
+
 void list_each(list *list, list_lambda fn) {
   list_node *node = list->head;
   while (node != NULL) {

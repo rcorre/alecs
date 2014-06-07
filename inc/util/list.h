@@ -44,6 +44,8 @@ void* list_popfront(list *list);
 list_node* list_remove(list *list, list_node *node, list_lambda fn);
 /** \brief find node in list whose value matches value (pointer comparison) */
 list_node* list_find(list *list, void *value);
+/** \brief count number of occurences of \c value in \c list*/
+int list_count(list *list, void *value);
 /** \brief apply fn to each value in the list */
 void list_each(list *list, list_lambda fn);
 /* -------------------------------------------------------------------------- */
