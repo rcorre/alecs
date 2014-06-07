@@ -139,6 +139,6 @@ void scenery_make_explosion(vector pos, vector size, double anim_rate,
   anim->tint = tint;
   al_game_play_sound(sound_name, false); // false: dont loop
   Timer *t = &ecs_add_component(boom, ECS_COMPONENT_TIMER)->timer;
-  t->time_left = 1 / (anim_rate * sprite_num_frames(anim));
+  t->time_left =  sprite_num_frames(anim) / anim_rate;
   t->timer_action = ecs_entity_free;
 }
