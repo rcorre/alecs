@@ -50,6 +50,8 @@ typedef void (*ecs_keyboard_handler)(struct ecs_entity *entity, int keycode,
 typedef struct Body {
   /** affects collision response */
   double mass;
+  /** rate of deceleration */
+  double deceleration_factor;
   /** rate of change in x and y coordinates (px/sec) */
   vector velocity;
   /** maximum linear velocity in px/sec */

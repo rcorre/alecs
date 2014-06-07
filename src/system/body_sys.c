@@ -65,7 +65,11 @@ static bool out_of_bounds(ecs_entity *e, Body *b) {
 
 static void limit_speed(Body *b) {
   double linear_factor = vector_len(b->velocity) / b->max_linear_velocity;
-  if (linear_factor > 1) {
+  if (linear_factor > 1) { // scale down to max speed
     b->velocity = vector_scale(b->velocity, 1 / linear_factor);
+  }
+  else { // apply normal deceleration
+    double decel_scale = fabs(1 - b->deceleration_factor * elapsed_time);
+    b->velocity = vector_scale(b->velocity, decel_scale);
   }
 }

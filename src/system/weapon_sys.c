@@ -124,6 +124,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
   b->velocity = current_weapon->initial_velocity;
   b->max_linear_velocity = current_weapon->max_speed;
+  b->deceleration_factor = current_weapon->deceleration_factor;
   Propulsion *p =
     &ecs_add_component(projectile, ECS_COMPONENT_PROPULSION)->propulsion;
   p->linear_accel = current_weapon->acceleration;

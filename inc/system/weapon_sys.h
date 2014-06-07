@@ -23,6 +23,7 @@ typedef struct Weapon {
   double turn_rate;
   double power;
   double radius;
+  double deceleration_factor;
   double fire_delay;
 } Weapon;
 
