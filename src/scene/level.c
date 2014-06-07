@@ -39,7 +39,7 @@ static void level_draw(void) {
   list_node *node = ecs_component_store[ECS_COMPONENT_COLLIDER]->head;
   for (; node; node = node->next) {
     rectangle r = ((ecs_component*)node->value)->collider.rect;
-    al_draw_rectangle(r.x, r.y, r.x + r.w, r.y + r.h, al_map_rgb_f(0,1,0), 3);
+    al_draw_rectangle(r.x, r.y, r.x + r.w, r.y + r.h, al_map_rgba_f(0,1,0,0.5), 2);
   }
 #endif
 }

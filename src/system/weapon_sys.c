@@ -7,7 +7,7 @@ static const float indicator_thickness = 5;
 static const double friendly_fire_time = 2;
 // flare's effect area
 static const double flare_radius = 250;
-#define PRIMARY_LOCK_COLOR al_map_rgba(128, 0, 0, 200)
+#define PRIMARY_LOCK_COLOR al_map_rgba(0, 128, 0, 200)
 #define SECONDARY_LOCK_COLOR al_map_rgba(0, 0, 128, 128)
 
 // explosion constants
@@ -23,7 +23,7 @@ static double till_next_fire;
 
 static void fire_at_target(struct ecs_entity *fired_by,
     struct ecs_entity *target, ecs_entity_team team);
-static void draw_lockon(struct ecs_entity *target);
+static void draw_lockon(struct ecs_entity *target, int lockon_count);
 // collision handler for projectile
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target);
 // blow up a projectile
@@ -61,7 +61,14 @@ void weapon_system_draw() {
         PRIMARY_LOCK_COLOR, indicator_thickness);
   }
   if (lockon_list) {
-    list_each(lockon_list, (list_lambda)draw_lockon);
+    list *already_drawn = list_new();
+    for (list_node *node = lockon_list->head; node; node = node->next) {
+      ecs_entity *target = node->value;
+      if (list_find(already_drawn, target)) { continue; }
+      list_push(already_drawn, target);
+      draw_lockon(target, list_count(lockon_list, target));
+    }
+    list_free(already_drawn, NULL);
   }
 }
 
@@ -145,10 +152,12 @@ static void fire_at_target(struct ecs_entity *firing_entity,
   scenery_make_explosion(fire_pos, (vector){1,2}, 50, al_map_rgb_f(1,1,1), "launch");
 }
 
-static void draw_lockon(struct ecs_entity *target) {
-  al_draw_arc(target->position.x, target->position.y,
-      indicator_radius, 0, 2 * PI, PRIMARY_LOCK_COLOR,
-      indicator_thickness);
+static void draw_lockon(struct ecs_entity *target, int lockon_count) {
+  // draw lockon rect
+  rectangle r = target->components[ECS_COMPONENT_COLLIDER]->collider.rect;
+  al_draw_rounded_rectangle(r.x, r.y, r.x + r.w, r.y + r.h, 1, 1, PRIMARY_LOCK_COLOR, 3);
+  // draw lock count
+  al_draw_textf(main_font, PRIMARY_LOCK_COLOR, r.x + r.w, r.y, 0, "%d", lockon_count);
 }
 
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)
