@@ -33,8 +33,11 @@ list_node* list_push(list *list, void *value) {
 }
 
 void* list_popfront(list *list) {
-  void *val = list->head->value;
-  list_remove(list, list->head, NULL);
+  void *val = NULL;
+  if (list->head) {
+    val = list->head->value;
+    list_remove(list, list->head, NULL);
+  }
   return val;
 }
 
