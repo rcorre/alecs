@@ -29,6 +29,7 @@
 #define SOUND_DIR RESOURCE_DIR "/sounds"
 #define DATA_DIR "data"
 #define COMPONENT_DATA_DIR DATA_DIR "/components"
+#define MAIN_FONT_NAME "LiberationMono-Regular"
 
 /** pointer to the main game display of size \ref SCREEN_W x \ref SCREEN_H*/
 extern ALLEGRO_DISPLAY *display;
@@ -36,6 +37,8 @@ extern ALLEGRO_DISPLAY *display;
 extern ALLEGRO_EVENT_QUEUE *event_queue;
 /** timer that ticks at a rate of \ref FPS */
 extern ALLEGRO_TIMER *frame_timer;
+/** font for general purpose use */
+ALLEGRO_FONT *main_font;
 
 /** set up allegro and subsystems, and load all resources */
 int al_game_init();

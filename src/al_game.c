@@ -5,6 +5,7 @@ static const int num_simultaneous_audio_samples = 5;
 ALLEGRO_DISPLAY *display;
 ALLEGRO_EVENT_QUEUE *event_queue;
 ALLEGRO_TIMER *frame_timer;
+ALLEGRO_FONT *main_font;
 
 // store preloaded resources accessible by name
 static stringmap *bitmap_resources, *font_resources, *sound_resources;
@@ -75,6 +76,7 @@ int al_game_init() {
       (list_lambda)al_destroy_bitmap);
   sound_resources = load_resource_dir(SOUND_DIR, sound_from_file,
       (list_lambda)al_destroy_sample);
+  main_font = al_game_get_font(MAIN_FONT_NAME);
 
   // event source setup
   al_register_event_source(event_queue, al_get_display_event_source(display));

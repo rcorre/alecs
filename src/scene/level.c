@@ -4,7 +4,6 @@ static const double enemy_time = 3.0;
 
 static bool run = true;
 static ecs_entity *player_ship;
-static ALLEGRO_FONT *main_font;
 static double next_enemy_time;
 
 static bool level_update(double time) {
@@ -69,7 +68,6 @@ static void level_shutdown() {
 }
 
 scene level_new(void) {
-  main_font = al_game_get_font("LiberationMono-Regular");
   player_ship = make_player_ship();
   weapon_system_set_weapons(player_ship, &swarmer_launcher, &destroyer_launcher);
   scenery_add_background("sunset", -SPRITE_LAYER_LIMIT, 0, 0);
