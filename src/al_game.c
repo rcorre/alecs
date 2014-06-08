@@ -1,6 +1,12 @@
 #include "al_game.h"
+#include "util/al_helper.h"
 
-static const int num_simultaneous_audio_samples = 5;
+/// passed to \c al_reserve_samples
+static const int num_simultaneous_audio_samples = 10;
+/// random variance to volume each time \ref al_game_play_sound is called
+static const double sound_volume_variance = 0.3;
+/// random variance to speed each time \ref al_game_play_sound is called
+static const double sound_speed_variance = 0.1;
 
 ALLEGRO_DISPLAY *display;
 ALLEGRO_EVENT_QUEUE *event_queue;
@@ -177,10 +183,13 @@ static void* sound_from_file(const char *filename) {
   return al_load_sample(filename);
 }
 
+/// play the sound identified by \c name
 ALLEGRO_SAMPLE_ID al_game_play_sound(const char *name, bool loop) {
   ALLEGRO_SAMPLE *sound = al_game_get_sound(name);
   ALLEGRO_SAMPLE_ID id;
-  al_play_sample(sound, 1, 0, 1, loop ? ALLEGRO_PLAYMODE_LOOP :
-      ALLEGRO_PLAYMODE_ONCE, &id); 
+  double vol = randd(1 - sound_volume_variance, 1 + sound_volume_variance);
+  double speed = randd(1 - sound_speed_variance, 1 + sound_speed_variance);
+  al_play_sample(sound, vol, 0, speed, 
+      loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE, &id); 
   return id;
 }
