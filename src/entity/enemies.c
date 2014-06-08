@@ -29,25 +29,8 @@ static void start_crashing(ecs_entity *enemy) {
   timer->timer_action = asplode_enemy;
 }
 
-ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
-  vector start;
-  switch (enter_from) {
-    case EAST:
-      start = (vector){SCREEN_W + 100, pos.y};
-      break;
-    case WEST:
-      start = (vector){-100, pos.y};
-      break;
-    case NORTH:
-      start = (vector){pos.x, -100};
-      break;
-    case SOUTH:
-      start = (vector){pos.x, SCREEN_H + 100};
-      break;
-    default:
-      start = pos;
-  }
-  ecs_entity *enemy = ecs_entity_new((vector)start, ENTITY_SHIP);
+void spawn_enemy(EnemySpawnData data) {
+  ecs_entity *enemy = ecs_entity_new(data.start, ENTITY_SHIP);
   // sprite
   ecs_attach_animation(enemy, "enemy1", 1, 64, 24, 6, ANIMATE_LOOP);
   // body
@@ -57,7 +40,6 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   // collider
   Collider *col = &ecs_add_component(enemy, ECS_COMPONENT_COLLIDER)->collider;
   col->rect = hitrect_from_sprite(enemy->sprite);
-  col->keep_inside_level = true;
   col->elastic_collision = true;
   col->collide_particle_effect = get_particle_generator("sparks");
   // mouse listener
@@ -72,16 +54,15 @@ ecs_entity* spawn_enemy(vector pos, Direction enter_from, ecs_entity *player) {
   pro->turn_rate = 1*PI;
   // behavior
   Behavior *beh = &ecs_add_component(enemy, ECS_COMPONENT_BEHAVIOR)->behavior;
-  beh->target = player;
+  beh->target = data.player;
   beh->type = BEHAVIOR_MOVE;
-  beh->location = pos;
+  beh->location = data.target;
   enemy->team = TEAM_ENEMY;
   Timer *timer = &ecs_add_component(enemy, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = randd(min_fire_time, max_fire_time);
   timer->timer_action = fire_at_player;
   ecs_component *health_comp = ecs_add_component(enemy, ECS_COMPONENT_HEALTH);
   health_comp->health = make_health(10, start_crashing, "smoke");
-  return enemy;
 }
 
 static void mine_collide(ecs_entity *mine, ecs_entity *player) {
