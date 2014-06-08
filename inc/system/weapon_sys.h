@@ -11,20 +11,22 @@ typedef enum WeaponState {
   WEAPON_RELOADING
 } WeaponState;
 
+/// describes a weapon
 typedef struct Weapon {
-  const char *name;
-  const char *particle_effect;
-  vector offset;
-  vector initial_velocity;
-  int max_lockons;
-  double lockon_time;
-  double max_speed;
-  double acceleration;
-  double turn_rate;
-  double power;
-  double radius;
-  double deceleration_factor;
-  double fire_delay;
+  const char *name;            ///< name of projectile sprite
+  const char *particle_effect; ///< name of projectile particle effect
+  vector offset;               ///< offset of launch site from entity
+  vector initial_velocity;     ///< initial velocity of projectiles
+  int max_lockons;             ///< maximum # of lockons for weapon
+  double lockon_time;          ///< time to lock on to a target
+  double max_speed;            ///< max speed of projectile
+  double acceleration;         ///< acceleration of projectile
+  double turn_rate;            ///< turn rate of projectile
+  double power;                ///< damage dealt by projectile
+  double radius;               ///< size of projectile explosion
+  double deceleration_factor;  ///< deceleration_factor of projectile \c Body
+  double fire_delay;           ///< time between successive launches
+  ecs_entity_trigger fire_fn;  ///< special function to use when firing
 } Weapon;
 
 /** set weapons for the weapon system */
@@ -44,6 +46,8 @@ void weapon_clear_target(struct ecs_entity *target);
 
 /** fire the player's current weapon */
 void weapon_fire_player();
+
+void fire_swarmer_pod(struct ecs_entity *firing_entity);
 
 /** fire an enemy's weapon. player is type void* for use as a delegate arg */
 void weapon_fire_enemy(struct ecs_entity *enemy, void *player);

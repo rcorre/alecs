@@ -22,7 +22,7 @@ static WeaponState current_weapon_state = WEAPON_READY;
 static double till_next_fire;
 
 static void fire_at_target(struct ecs_entity *fired_by,
-    struct ecs_entity *target, ecs_entity_team team);
+    struct ecs_entity *target, double firing_angle);
 static void draw_lockon(struct ecs_entity *target, int lockon_count);
 // collision handler for projectile
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target);
@@ -45,7 +45,7 @@ void weapon_system_fn(double time) {
     if (till_next_fire < 0 && lockon_list->length > 0) {
       till_next_fire = current_weapon->fire_delay;
       struct ecs_entity *target = list_popfront(lockon_list);
-      fire_at_target(player_entity, target, TEAM_FRIENDLY);
+      fire_at_target(player_entity, target, -PI / 2);
       if (lockon_list->length == 0) { // fired at last lockon
         current_weapon_state = WEAPON_READY;
       }
@@ -95,12 +95,40 @@ void weapon_system_set_weapons(struct ecs_entity *player, Weapon *wep1, Weapon *
 
 void weapon_fire_player() {
   if (current_weapon_state == WEAPON_READY) {
-    current_weapon_state = WEAPON_FIRING;
+    if (current_weapon->fire_fn) { // special firing function
+      current_weapon->fire_fn(player_entity);
+    }
+    else { // standard firing function
+      current_weapon_state = WEAPON_FIRING;
+    }
   }
 }
 
+static void swarmer_burst_fn(struct ecs_entity *pod) {
+  ecs_entity *target;
+  while ((target = list_popfront(lockon_list))) {
+    fire_at_target(pod, target, randd(0, 2 * PI));
+  }
+  explode(pod);
+}
+
+void fire_swarmer_pod(struct ecs_entity *firing_entity) {
+  vector fire_pos = vector_add(firing_entity->position, current_weapon->offset);
+  struct ecs_entity *pod = ecs_entity_new(firing_entity->position, ENTITY_MISSILE);
+  pod->position = fire_pos;
+  ecs_attach_sprite(pod, "swarmer-pod", 0);
+  Body *b = &ecs_add_component(pod, ECS_COMPONENT_BODY)->body;
+  b->velocity = (vector){-100, 0};
+  b->max_linear_velocity = 100;
+  b->deceleration_factor = 0.5;
+  pod->team = firing_entity->team;
+  Timer *timer = &ecs_add_component(pod, ECS_COMPONENT_TIMER)->timer;
+  timer->time_left = 1.2;
+  timer->timer_action = swarmer_burst_fn;
+}
+
 void weapon_fire_enemy(struct ecs_entity *enemy, void *player) {
-  fire_at_target(enemy, (struct ecs_entity*)player, TEAM_ENEMY);
+  fire_at_target(enemy, (struct ecs_entity*)player, -PI / 2);
 }
 
 void weapon_swap() {
@@ -114,12 +142,12 @@ void weapon_swap() {
 }
 
 static void fire_at_target(struct ecs_entity *firing_entity,
-    struct ecs_entity *target, ecs_entity_team team)
+    struct ecs_entity *target, double firing_angle)
 {
   vector fire_pos = vector_add(firing_entity->position, current_weapon->offset);
   struct ecs_entity *projectile = ecs_entity_new(firing_entity->position, ENTITY_MISSILE);
   projectile->position = fire_pos;
-  projectile->angle = -PI / 2;
+  projectile->angle = firing_angle;
   ecs_attach_sprite(projectile, current_weapon->name, 0);
   Body *b = &ecs_add_component(projectile, ECS_COMPONENT_BODY)->body;
   b->velocity = current_weapon->initial_velocity;
@@ -140,7 +168,7 @@ static void fire_at_target(struct ecs_entity *firing_entity,
       ECS_COMPONENT_COLLIDER)->collider;
   collider->rect = hitrect_from_sprite(projectile->sprite);
   collider->on_collision = hit_target;
-  projectile->team = team;
+  projectile->team = firing_entity->team;
   Timer *timer = &ecs_add_component(projectile, ECS_COMPONENT_TIMER)->timer;
   timer->time_left = friendly_fire_time;
   timer->timer_action = friendly_fire_timer_fn;
@@ -154,11 +182,14 @@ static void fire_at_target(struct ecs_entity *firing_entity,
 }
 
 static void draw_lockon(struct ecs_entity *target, int lockon_count) {
+  Collider *collider = &target->components[ECS_COMPONENT_COLLIDER]->collider;
   // draw lockon rect
-  rectangle r = target->components[ECS_COMPONENT_COLLIDER]->collider.rect;
-  al_draw_rounded_rectangle(r.x, r.y, r.x + r.w, r.y + r.h, 1, 1, PRIMARY_LOCK_COLOR, 3);
-  // draw lock count
-  al_draw_textf(main_font, PRIMARY_LOCK_COLOR, r.x + r.w, r.y, 0, "%d", lockon_count);
+  if (collider) {
+    rectangle r = collider->rect;
+    al_draw_rounded_rectangle(r.x, r.y, r.x + r.w, r.y + r.h, 1, 1, PRIMARY_LOCK_COLOR, 3);
+    // draw lock count
+    al_draw_textf(main_font, PRIMARY_LOCK_COLOR, r.x + r.w, r.y, 0, "%d", lockon_count);
+  }
 }
 
 static void hit_target(struct ecs_entity *projectile, struct ecs_entity *target)

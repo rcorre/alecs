@@ -65,7 +65,7 @@ Weapon seeker_launcher = {
   .turn_rate = 1.5 * PI,
   .power = 5,
   .fire_delay = 0.33,
-  .radius = 20
+  .radius = 20,
 };
 
 Weapon destroyer_launcher = {
@@ -96,6 +96,7 @@ Weapon swarmer_launcher = {
   .deceleration_factor = 0.2,
   .turn_rate = 1.2 * PI,
   .power = 5,
-  .fire_delay = 0.1,
-  .radius = 15
+  .fire_delay = 0.03,
+  .radius = 15,
+  .fire_fn = fire_swarmer_pod
 };
